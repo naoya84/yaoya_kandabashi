@@ -94,6 +94,8 @@ erDiagram
       bigint userid "ユーザーid"
       bigint store_id "お店id"
       string(32) productname "商品名"
+      boolean flag "購入済みフラグ"
+      timestamp time "タイムスタンプ"
     }
 
 ```
