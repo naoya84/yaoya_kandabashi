@@ -70,19 +70,19 @@ erDiagram
   store_list ||--o{ shopping_list: "お店idと買い物リストを紐付ける"
 
     customer {
-      bigint id PK
+      int(32) id PK
       string name "ユーザー名"
       string(8) salt "ソルト"
       string(64) hash "ハッシュ"
     }
 
     store_list {
-      bigint id PK
+      int(32) id PK
       string(32) storeName "店名"
     }
 
     storage {
-      bigint id PK
+      int(32) id PK
       int(32) storeId "お店id"
       string(32) productName "商品名"
       string(32) productShape "形状"
@@ -91,8 +91,9 @@ erDiagram
     }
 
     shopping_list {
-      bigint userId "ユーザーid"
-      bigint storeId "お店id"
+      int(32) id PK
+      int(32) userId "ユーザーid"
+      int(32) storeId "お店id"
       string(32) productName "商品名"
       boolean flag "購入済みフラグ"
       timestamp time "タイムスタンプ"
