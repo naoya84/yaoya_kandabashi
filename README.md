@@ -65,35 +65,35 @@ user テーブルのソルト・ハッシュが必要になるのか不明(passp
 
 ```mermaid
 erDiagram
-  storelist ||--o{ storage: "お店idと店名を紐付ける"
-  user ||--o{ shoppinglist: "ユーザーidと買い物リストを紐付ける"
-  storelist ||--o{ shoppinglist: "お店idと買い物リストを紐付ける"
+  store_list ||--o{ storage: "お店idと店名を紐付ける"
+  customer ||--o{ shopping_list: "ユーザーidと買い物リストを紐付ける"
+  store_list ||--o{ shopping_list: "お店idと買い物リストを紐付ける"
 
-    user {
+    customer {
       bigint id PK
       string name "ユーザー名"
-      string(8) solt "ソルト"
+      string(8) salt "ソルト"
       string(64) hash "ハッシュ"
     }
 
-    storelist {
+    store_list {
       bigint id PK
-      string(32) storename "店名"
+      string(32) storeName "店名"
     }
 
     storage {
       bigint id PK
-      int(32) store_id "お店id"
-      string(32) productname "商品名"
-      string(32) productshape "形状"
-      int(32) pice "在庫数"
+      int(32) storeId "お店id"
+      string(32) productName "商品名"
+      string(32) productShape "形状"
+      int(32) piece "在庫数"
       int(32) price "金額"
     }
 
-    shoppinglist {
-      bigint userid "ユーザーid"
-      bigint store_id "お店id"
-      string(32) productname "商品名"
+    shopping_list {
+      bigint userId "ユーザーid"
+      bigint storeId "お店id"
+      string(32) productName "商品名"
       boolean flag "購入済みフラグ"
       timestamp time "タイムスタンプ"
     }
