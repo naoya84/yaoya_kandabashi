@@ -5,8 +5,8 @@
   "main": "index.js",
   "scripts": {
     "test": "echo \"Error: no test specified\" && exit 1",
-    "start": "node server.js",
-    "startmon": "nodemon server.js",
+    "start": "node index.js",
+    "startmon": "nodemon index.js",
     "build": "npm install",
     "migrate": "knex migrate:latest",
     "makeMigrate": "knex migrate:make",
