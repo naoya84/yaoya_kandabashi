@@ -4,7 +4,7 @@
 
 // module.exports = knex;
 
-const config = require('../knexfile');
+const config = require('./knexfile');
 const knex = require('knex')(config);
 
 module.exports = knex;
