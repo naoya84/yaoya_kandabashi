@@ -31,3 +31,6 @@ production-server
 .next
 junit
 *.sw?
+
+.env.development
+.env.production
