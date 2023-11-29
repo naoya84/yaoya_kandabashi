@@ -1,4 +1,5 @@
 // Update with your config settings.
+//「.env」ファイルを使って、connectionの中身を書くことを伝えるためにrequire・・が必要。
 require('dotenv').config({
   path: './.env',
 });
@@ -43,11 +44,12 @@ module.exports = {
 
   production: {
     client: 'postgresql',
-    connection: {
-      database: 'my_db',
-      user: 'username',
-      password: 'password',
-    },
+    // connection: {
+    //   database: 'my_db',
+    //   user: 'username',
+    //   password: 'password',
+    // },
+    connection: process.env.DATABASE_URL,
     pool: {
       min: 2,
       max: 10,
