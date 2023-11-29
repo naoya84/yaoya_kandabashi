@@ -10,6 +10,8 @@ app.use(bodyParser.json());
 app.use(express.json()); //JSON形式のファイルを扱えるようにする
 app.use(cors());
 
+// app.use(express.static('public'));
+
 let date = new Date();
 
 //購入する商品を送信する　-> shipping_list（id:既存＋１,userId:現状持って来れる？今後はどうとる？,storeId:なにを基準？,productName,piece,flag,time）に追加する。
@@ -153,6 +155,16 @@ app.get('/api/store', async (req, res) => {
 //       res.send(data); //dataは配列
 //     });
 // });
+
+// app.get('/', (req, res) => {
+//   res.status(200);
+//   res.sendFile('/index.html');
+// });
+
+app.use(express.static(path.resolve(__dirname, '../front', 'dist')));
+app.get('/*', (req, res) => {
+  res.sendFile(path.join(__dirname, '../front', 'dist', 'index.html'));
+});
 
 app.listen(4242, () => {
   console.log('server on PORT4242');
