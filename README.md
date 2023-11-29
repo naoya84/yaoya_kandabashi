@@ -4,6 +4,9 @@
 
 至るところに探し回る…なんて経験ありませんか？
 
+## デプロイ先URL
+https://yaoya-kandabashi.onrender.com
+
 ## 11/2 ９（水） 共有事項
 
 - [ ] Seed データにヨーグルト、舞茸重複問題
