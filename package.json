@@ -1,0 +1,16 @@
+{
+  "name": "yaoya_kandabashi",
+  "version": "1.0.0",
+  "description": "買い物先に行ったら、欲しい物が売ってねぇ…。",
+  "main": "index.js",
+  "scripts": {
+    "setup": "npm install --prefix front && npm install --prefix back",
+    "start": "concurrently \"npm run dev --prefix front\" \"npm run start --prefix back\""
+  },
+  "keywords": [],
+  "author": "",
+  "license": "ISC",
+  "dependencies": {
+    "concurrently": "^8.2.2"
+  }
+}
