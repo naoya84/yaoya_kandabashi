@@ -41,22 +41,24 @@ app.post('/api/customers/:id/shopping_list', async (req, res) => {
     const amount = data[i].count;
 
     //現在のshopping_listからidが１番大きいものを抜き出して今から登録するアイテムのidを設定
-    const id = await knex('shopping_list')
+    let id;
+    await knex('shopping_list')
       .max('id as maxId')
       .then(([result]) => {
-        return result.maxId + 1;
+        id = result.maxId + 1;
+        console.log('🚀 ~ file: index.js:28 ~ app.post ~ id:', id);
       });
-    console.log('🚀 ~ file: index.js:28 ~ app.post ~ id:', id);
 
     //最適なstoreIdを設定する(まずは一番安いものを持ってくる)
-    const minPrice = await knex('storage')
+    let minPrice;
+    await knex('storage')
       .where('productName', shopping)
       .where('piece', '>', amount)
       .min('price as minPrice')
       .then(([result]) => {
-        return result.minPrice;
+        minPrice = result.minPrice;
+        console.log('🚀 ~ file: index.js:39 ~ app.post ~ minPrice:', minPrice);
       });
-    console.log('🚀 ~ file: index.js:39 ~ app.post ~ minPrice:', minPrice);
 
     //最適なstoreIdを設定する(minPriceと同じstoreIdを探す)
     let storeId;
