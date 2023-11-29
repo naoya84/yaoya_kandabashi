@@ -14,7 +14,7 @@ export default function Search() {
     const target = e.target;
     if (target.checked) {
       setCondition((prevData) => {
-        prevData.push({ shopping: target.value, quantity: 0 });
+        prevData.push({ shopping: target.value, count: 0 });
         return prevData;
       });
     } else {
@@ -43,7 +43,7 @@ export default function Search() {
         setCondition((prevData) => {
           for (const obj of prevData) {
             if (obj.shopping === foodName) {
-              obj.quantity = num;
+              obj.count = num;
             }
           }
           return prevData;
@@ -51,22 +51,33 @@ export default function Search() {
       } else {
         document.getElementById(foodName).checked = true;
         setCondition((prevData) => {
-          prevData.push({ shopping: foodName, quantity: num });
+          prevData.push({ shopping: foodName, count: num });
           return prevData;
         });
       }
     }
   };
+  axios.defaults.baseURL = 'http://localhost:4242';
+  //スラッシュ入れたらドメインの反映はできました！ただ、またその先で怒られているようです(12:20)。
+
+  // const api = axios.create({
+  //   baseURL: import.meta.env.VITE_BACKEND_URL
+  //   baseURL: 'http://localhost:4242'
+  // });
+  // 例えばGETリクエストを送る場合
+  // api.get('/your-endpoint').then(response => {
+  //   console.log(response.data);
+  // });
 
   const handleSubmit = (e) => {
     e.preventDefault();
     console.log(condition); // データをコンソールに表示
 
     axios
-      .post(`/api/customers/${1}/shopping_list`, condition) //後でユーザーIDに書き換え
-      .post(`http:localhost:4242/api/customers/${1}/shopping_list`, condition) //後でユーザーIDに書き換え
+      // .post(`/api/customers/${1}/shopping_list`, condition) //後でユーザーIDに書き換え
+      .post(`/api/customers/${3}/shopping_list`, condition) //後でユーザーIDに書き換え
       .then((response) => {
-        setPost(response.data);
+        // setPost(response.data);
         navigate(`/result`);
         alert('登録が完了しました');
       })
