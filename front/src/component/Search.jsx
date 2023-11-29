@@ -1,6 +1,6 @@
 import { Link, useNavigate } from 'react-router-dom';
 import axios from 'axios';
-import { useState, useEffect } from 'react';
+import React, { useState, useEffect } from 'react';
 import '../assets/style/Search.css';
 
 export default function Search() {
@@ -57,7 +57,11 @@ export default function Search() {
       }
     }
   };
-  axios.defaults.baseURL = 'http://localhost:4242';
+
+  const rootURL =
+    import.meta.env.VITE_API_URL || 'https://yaoya-kandabashi.onrender.com';
+  console.log(rootURL);
+  axios.defaults.baseURL = rootURL;
   //スラッシュ入れたらドメインの反映はできました！ただ、またその先で怒られているようです(12:20)。
 
   // const api = axios.create({
@@ -100,44 +104,52 @@ export default function Search() {
         <tbody>
           <tr>
             {groupedFoodItems.map((group, index) => (
-              <>
-                <td>
-                  {group.map((food) => (
-                    <>
-                      <input
-                        type="checkbox"
-                        id={food}
-                        name="selectFood"
-                        value={food}
-                        onChange={(e) => handleInputChange(e)}
-                      />
-                      <label htmlFor={food}>{food}　</label>
-                      <br />
-                    </>
-                  ))}
-                </td>
-                <td>
-                  {group.map((food) => (
-                    <>
-                      <select
-                        name={food}
-                        onChange={(e) =>
-                          handleQuantityChange(food, Number(e.target.value))
-                        }
-                      >
-                        {[...Array(11).keys()].map((num) => (
-                          <option key={num} name={food} value={num}>
-                            {num}
-                          </option>
-                        ))}
-                      </select>
-                      <label>　　</label>
+              <React.Fragment key={index}>
+                <>
+                  <td>
+                    {group.map((food) => (
+                      <React.Fragment key={food}>
+                        <>
+                          <input
+                            type="checkbox"
+                            id={food}
+                            name="selectFood"
+                            value={food}
+                            onChange={(e) => handleInputChange(e)}
+                          />
+                          <label key={food} htmlFor={food}>
+                            {food}　
+                          </label>
+                          <br />
+                        </>
+                      </React.Fragment>
+                    ))}
+                  </td>
+                  <td>
+                    {group.map((food) => (
+                      <React.Fragment key={food}>
+                        <>
+                          <select
+                            name={food}
+                            onChange={(e) =>
+                              handleQuantityChange(food, Number(e.target.value))
+                            }
+                          >
+                            {[...Array(11).keys()].map((num) => (
+                              <option key={num} name={food} value={num}>
+                                {num}
+                              </option>
+                            ))}
+                          </select>
+                          <label>　　</label>
 
-                      <br />
-                    </>
-                  ))}
-                </td>
-              </>
+                          <br />
+                        </>
+                      </React.Fragment>
+                    ))}
+                  </td>
+                </>
+              </React.Fragment>
             ))}
           </tr>
         </tbody>
@@ -226,7 +238,7 @@ const foodItems = [
   'アイスクリーム',
   'プリン',
   'ゼリー',
-  'ヨーグルト2',
+  'ヨーグルト',
   'キャンディ',
   'コーヒー豆',
   '紅茶葉',
