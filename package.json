@@ -5,7 +5,7 @@
   "main": "index.js",
   "scripts": {
     "setup": "npm install && npm install --prefix front && npm install --prefix back && npm run migrate --prefix back && npm run seed --prefix back",
-    "start": "concurrently \"npm run dev --prefix front\" \"npm run start --prefix back\""
+    "start": "concurrently \"npm run dev --prefix front\" \"npm run startmon --prefix back\""
   },
   "keywords": [],
   "author": "",
