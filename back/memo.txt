@@ -1,4 +1,0 @@
-push -> git push origin jin
-
-取り込む時は、pullする。
-
