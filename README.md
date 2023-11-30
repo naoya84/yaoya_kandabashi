@@ -104,34 +104,34 @@ erDiagram
   store_list ||--o{ shopping_list: "お店idと買い物リストを紐付ける"
 
     customer {
-      int(32) id PK
+      int id PK
       string name "ユーザー名"
       string(8) salt "ソルト"
       string(64) hash "ハッシュ"
     }
 
     store_list {
-      int(32) id PK
+      int id PK
       string(32) storeName "店名"
-      int(32) northLatitude "北緯"
-      int(32) eastLongitude "東経"
+      int northLatitude "北緯"
+      int eastLongitude "東経"
     }
 
     storage {
-      int(32) id PK
-      int(32) storeId "お店id"
+      int id PK
+      int storeId "お店id"
       string(32) productName "商品名"
       string(32) productShape "形状"
-      int(32) piece "在庫数"
-      int(32) price "金額"
+      int piece "在庫数"
+      int price "金額"
     }
 
     shopping_list {
-      int(32) id PK
-      int(32) userId "ユーザーid"
-      int(32) storeId "お店id"
+      int id PK
+      int userId "ユーザーid"
+      int storeId "お店id"
       string(32) productName "商品名"
-      int(32) piece "在庫数"
+      int piece "購入したい数"
       boolean flag "購入済みフラグ"
       timestamp time "タイムスタンプ"
     }
