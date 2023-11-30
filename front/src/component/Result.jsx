@@ -26,18 +26,22 @@ export default function Result() {
   //   });
   // };
 
+  // const sortFromResult = 'storeName';
+  const sortFromResult = 'productName';
+
   useEffect(() => {
     axios
-      .get(`/api/customers/${3}/result/store`) //後でユーザーIDに書き換え
+      .get(`/api/customers/${1}/result/store`) //後でユーザーIDに書き換え
       .then((response) => {
-        setStore(response.data);
+        const result = response.data.map((elem) => elem[sortFromResult]);
+        setStore([...new Set(result)]);
+        // setStore(response.data); //initial code
       })
       .catch((error) => {
         console.log(error);
         alert('取得に失敗しました');
       });
   }, []);
-
   return (
     <>
       <h1>店一覧</h1>
@@ -54,7 +58,8 @@ export default function Result() {
               <tr>
                 <td>
                   <Link to={`/result/store/${obj.id}`} className="Link">
-                    {obj.storeName}
+                    {/* {obj.storeName} */}
+                    {obj}
                   </Link>
                 </td>
                 <td>後で地図を表示</td>

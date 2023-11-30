@@ -93,12 +93,18 @@ app.post('/api/customers/:id/shopping_list', async (req, res) => {
 app.get('/api/customers/:id/result/store', async (req, res) => {
   //カスタマーidを取得
   const customerId = req.params.id;
+  // const customerId = Number(req.params.id);
+
   //フロントに渡す変数を定義
   let resultArray;
-  await knex('shopping_list')
+  await knex('store_list')
     .where({ userId: customerId, flag: false })
-    .select('store_list.id', 'store_list.storeName')
-    .join('store_list', 'shopping_list.storeId', '=', 'store_list.id')
+    .select(
+      'store_list.id',
+      'store_list.storeName',
+      'shopping_list.productName'
+    )
+    .join('shopping_list', 'shopping_list.storeId', '=', 'store_list.id')
     .then((data) => {
       resultArray = data;
     })
