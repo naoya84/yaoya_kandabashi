@@ -28,7 +28,7 @@ export default function Result() {
 
   useEffect(() => {
     axios
-      .get(`/api/customers/${3}/result/store`) //後でユーザーIDに書き換え
+      .get(`/api/customers/1/result/store`) //後でユーザーIDに書き換え
       .then((response) => {
         setStore(response.data);
       })
