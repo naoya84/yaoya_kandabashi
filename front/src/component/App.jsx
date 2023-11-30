@@ -7,18 +7,21 @@ import Home from './Home';
 import Navber from './Navber';
 import Search from './Search';
 import Result from './Result';
+import ResultStore from './ResultStore';
 import Footer from './Footer';
 
 function App() {
-  const [count, setCount] = useState(0);
-
   return (
     <div className="App">
       <Navber></Navber>
       <Routes>
         <Route path="/" element={<Home></Home>} />
         <Route path="/search" element={<Search></Search>} />
-        <Route path="/result" element={<Result></Result>} />
+        <Route path="/result/store" element={<Result></Result>} />
+        <Route
+          path="/result/store/:storeId"
+          element={<ResultStore></ResultStore>}
+        />
         {/* <Route path="/customer" element={<Customer></Customer>} /> */}
       </Routes>
       <Footer></Footer>

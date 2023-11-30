@@ -6,15 +6,24 @@ header {
   height: 60px;
   width: 100%;
   padding: 0px 15px;
-  background-color: rgba(34, 49, 52, 0.9);
+  background-color: white;
+  /* background-color: rgb(241, 241, 83); */
+  /* background-color: rgb(174, 253, 105); */
   position: fixed;
   top: 0;
   z-index: 10;
   display: flex;
+  border-bottom: 1.5px solid;
+  border-bottom-color: rgb(225, 225, 225);
 }
 
 .logo {
   font-size: 25px;
+}
+
+.logo a {
+  color: green;
+  font-family: Hiragino Kaku Gothic Std;
 }
 
 nav {
@@ -29,7 +38,7 @@ ul {
 }
 
 a {
-  color: #ffffff;
+  color: black;
   text-decoration: none;
   display: block;
   line-height: 60px;

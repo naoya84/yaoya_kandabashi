@@ -43,6 +43,9 @@ export default function Navber() {
             <Link to={`/search`}>SEARCH</Link>
           </li>
           <li>
+            <Link to={`/result/store`}>RESULT</Link>
+          </li>
+          <li>
             <Link to={`#`}>MYPAGE</Link>
           </li>
           <li>
@@ -58,6 +61,9 @@ export default function Navber() {
           </li>
           <li>
             <Link to={`/search`}>SEARCH</Link>
+          </li>
+          <li>
+            <Link to={`/result/store`}>RESULT</Link>
           </li>
           <li>
             <Link to={`#`}>MYPAGE</Link>

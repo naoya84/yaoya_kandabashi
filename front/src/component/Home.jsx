@@ -1,6 +1,7 @@
 import { Link } from 'react-router-dom';
 import { useState, useEffect } from 'react';
-// import '../style/Home.css';
+import topImg from '../assets/image/yasai.jpg';
+import '../assets/style/Home.css';
 
 export default function Home() {
   //   const { team } = props;
@@ -9,7 +10,7 @@ export default function Home() {
 
   return (
     <>
-      <h1>売ってる店まで連れてくでー</h1>
+      <img src={topImg} alt="マップの画像" />
     </>
   );
 }
