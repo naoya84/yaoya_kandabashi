@@ -19,6 +19,10 @@ table {
   margin-top: 10px;
 }
 
+.search-button:hover {
+  background-color: rgb(137, 235, 135);
+}
+
 .search-column {
   float: left;
 }

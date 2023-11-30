@@ -49,6 +49,10 @@ a {
   display: none;
 }
 
+.sm a {
+  color: white;
+}
+
 /**********************************　
     以下、ハンバーガーメニューの設定　
     ************************************/
@@ -72,7 +76,7 @@ a {
     left: 15px;
     width: 30px;
     height: 4px;
-    background-color: white;
+    background-color: rgb(96, 226, 100);
     border-radius: 8px;
     transition: ease 0.75s;
   }
@@ -107,7 +111,7 @@ a {
     position: absolute;
     z-index: 10;
     width: 100%;
-    background-color: rgba(34, 49, 52, 0.9);
+    background-color: rgb(128, 204, 128);
   }
 
   ul {
