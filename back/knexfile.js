@@ -15,7 +15,7 @@ module.exports = {
       host: process.env.DB_HOST || '127.0.0.1',
       port: process.env.DB_PORT || 5432,
       database: process.env.DB_NAME || 'yaoya',
-      user: process.env.DB_USER || 'user',
+      user: process.env.DB_USER || 'yokota',
       password: process.env.DB_PASSWORD || null,
     },
     migrations: {
