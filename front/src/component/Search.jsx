@@ -7,11 +7,9 @@ const rootURL = import.meta.env.VITE_API_URL || 'https://yaoya-kandabashi.onrend
 axios.defaults.baseURL = rootURL;
 
 export default function Search() {
-  //   const { team } = props;
   const [condition, setCondition] = useState([]);
   const navigate = useNavigate();
 
-  // useEffect(() => {}, []);
 
   const handleInputChange = (e) => {
     const target = e.target;
@@ -61,23 +59,44 @@ export default function Search() {
     }
   };
 
-  const handleSubmit = (e) => {
+  const handleSubmit = async(e) => {
     e.preventDefault();
-    console.log('選んだ商品：', condition); // データをコンソールに表示
-    const userId = 3; // 仮で設定中です。Passport.js来たら変更
+    console.log('condition',condition); // データをコンソールに表示
 
-    axios
-      .post(`/api/customers/${userId}/shopping_list`, condition) //後でユーザーIDに書き換え
-      .then((response) => {
-        // setPost(response.data);
-        console.log('response', response['config']['data']);
-        navigate(`/result/store`);
-        alert('登録が完了しました');
-      })
-      .catch((error) => {
-        console.log(error);
-        alert('登録に失敗しました');
+    try{
+      const response = await fetch('http://localhost:4242/api/customers/1/shopping_list', {
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/json',
+        },
+        body: JSON.stringify(condition),
       });
+  
+      if(response.ok){
+        console.log('post_ok', response);
+        alert('登録が完了しました');
+        navigate(`/result/store`);
+      }else{
+        console.log('post_ng', response);
+        alert('登録に失敗しました');
+      }
+    }catch (error){
+      console.log('error',error);
+      alert('登録に失敗しました');
+    }
+    
+
+    // axios
+    //   .post(`/api/customers/${3}/shopping_list`, condition) //後でユーザーIDに書き換え
+    //   .then((response) => {
+    //     // setPost(response.data);
+    //     navigate(`/result`);
+    //     alert('登録が完了しました');
+    //   })
+    //   .catch((error) => {
+    //     console.log(error);
+    //     alert('登録に失敗しました');
+    //   });
   };
 
   const groupedFoodItems = [];

@@ -5,6 +5,7 @@ const cors = require('cors');
 const path = require('path');
 
 const bodyParser = require('body-parser');
+const { error } = require('console');
 app.use(bodyParser.urlencoded({ extended: true }));
 app.use(bodyParser.json());
 
@@ -37,6 +38,7 @@ app.post('/api/customers/:id/shopping_list', async (req, res) => {
   //アイテムの数だけ、for文でshopping_listに追加していく
   for (let i = 0; i < Num; i++) {
     //req.bodyから必要情報取り出し
+    console.log('data',data);
     const shopping = data[i].shopping;
     const amount = data[i].count;
 
@@ -72,7 +74,7 @@ app.post('/api/customers/:id/shopping_list', async (req, res) => {
 
     //１つのアイテムに対して安い順番で３候補持ってきて、場所をまとめたパターンと最安値パターンの２ルートは水曜日以降で作りたい。
 
-    //knexでデータ追加
+    //knexでデータ追加    
     await knex('shopping_list')
       .insert({
         id: id,
@@ -84,8 +86,12 @@ app.post('/api/customers/:id/shopping_list', async (req, res) => {
         time: time,
       })
       .then(() => {
+        console.log('post対応完了');
         res.status(200).send('post対応完了');
-      });
+      })
+      .catch(error=>
+        console.log('error',error)
+      );
   }
 });
 
