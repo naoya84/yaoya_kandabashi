@@ -34,9 +34,9 @@ h1::after {
   -ms-transform: translateX(-50%);
 }
 
-h2 {
+/* h2 {
   padding: 0.5em 1em;
   background-color: #e1eef5;
   box-shadow: 5px -5px #4c9ac0;
   position: relative;
-}
+} */

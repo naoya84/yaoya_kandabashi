@@ -1,3 +1,71 @@
 a:hover {
   color: rgb(137, 235, 135);
 }
+
+.page-title {
+  /* background: rgb(239, 222, 28); */
+  padding: 2% 0 0 2%;
+  font-size: 1.5em;
+}
+
+.result-container {
+  display: flex;
+  width: 100%;
+  /* background: rgb(62, 165, 216); */
+  justify-content: space-between;
+  padding: 2% 5%;
+  min-height: 500px;
+}
+
+.shopping-list {
+  /* background: rgb(28, 239, 81); */
+  width: 46%;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  padding-bottom: 30px;
+  background-size: cover; /* 画像を要素全体に広げる */
+  background-position: center; /* 画像を中央に配置 */
+  background-repeat: no-repeat; /* 画像の繰り返しを防ぐ */
+  border-radius: 10px;
+}
+
+.shopping-box,
+.store-box {
+  display: flex;
+  flex-direction: column;
+  width: 70%;
+  background: rgba(255, 255, 255, 0.92);
+  margin-top: 30px;
+  padding: 10%;
+  min-height: 250px;
+  border-radius: 10px;
+}
+
+.shopping-box label {
+  margin-bottom: 10px;
+  border-bottom: 1px dashed #696868;
+  padding-bottom: 5px;
+  cursor: pointer;
+}
+
+.store-list {
+  /* background: rgb(28, 239, 81); */
+  width: 46%;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  padding-bottom: 30px;
+  background-size: cover; /* 画像を要素全体に広げる */
+  background-position: center; /* 画像を中央に配置 */
+  background-repeat: no-repeat; /* 画像の繰り返しを防ぐ */
+  border-radius: 10px;
+  min-height: 500px;
+}
+
+.Link {
+  margin-bottom: 10px;
+  padding-bottom: 5px;
+  cursor: pointer;
+  line-height: normal;
+}
