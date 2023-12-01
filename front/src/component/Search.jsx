@@ -1,4 +1,5 @@
-import { Link, useNavigate } from 'react-router-dom';
+import { useNavigate } from 'react-router-dom';
+import { useAuth } from '../contexts/AuthContext';
 import axios from 'axios';
 import React, { useState, useEffect } from 'react';
 import '../assets/style/Search.css';
@@ -9,7 +10,14 @@ axios.defaults.baseURL = rootURL;
 export default function Search() {
   const [condition, setCondition] = useState([]);
   const navigate = useNavigate();
+  const { isAuthenticated, userId, userName } = useAuth();
 
+  useEffect(
+    ()=>{
+      console.log('ログイン情報', isAuthenticated, userId, userName);
+    },
+    []
+  )
 
   const handleInputChange = (e) => {
     const target = e.target;
