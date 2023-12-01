@@ -1,11 +1,38 @@
-.search-container {
-  width: 80%;
-  margin: 0 auto;
+.page-title {
+  /* background: rgb(239, 222, 28); */
+  padding: 2% 0 0 2%;
+  font-size: 1.5em;
 }
 
-table {
-  margin: 50px auto;
+.search-container {
+  width: 80%;
+  margin: auto;
 }
+
+
+
+.category_container {
+  margin: 10px auto;
+  display: flex;
+}
+
+.category_box{
+  background-color: #cbead0;
+  width: 15%;
+  margin: auto 20px;
+}
+
+.category_name{
+  font-size: 1.5rem;
+}
+
+.item_box {
+  margin-top: 10px;
+  margin-bottom: 10px;
+  color: rgb(65, 58, 58);
+  font-size: 1.2rem;
+}
+
 
 .search-button {
   font-weight: bold;
@@ -21,14 +48,4 @@ table {
 
 .search-button:hover {
   background-color: rgb(137, 235, 135);
-}
-
-.search-column {
-  float: left;
-}
-
-.page-title {
-  /* background: rgb(239, 222, 28); */
-  padding: 2% 0 0 2%;
-  font-size: 1.5em;
 }
