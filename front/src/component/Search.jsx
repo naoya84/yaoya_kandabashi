@@ -3,8 +3,7 @@ import axios from 'axios';
 import React, { useState, useEffect } from 'react';
 import '../assets/style/Search.css';
 
-const rootURL =
-  import.meta.env.VITE_API_URL || 'https://yaoya-kandabashi.onrender.com';
+const rootURL = import.meta.env.VITE_API_URL || 'https://yaoya-kandabashi.onrender.com';
 axios.defaults.baseURL = rootURL;
 
 export default function Search() {
@@ -109,6 +108,7 @@ export default function Search() {
 
   return (
     <div className="search-container">
+      <div className="page-title">SEARCH</div>
       <h1>商品選択</h1>
       <form onSubmit={handleSubmit}>
         <table className="shoppingList">
@@ -116,53 +116,39 @@ export default function Search() {
             <tr>
               {groupedFoodItems.map((group, index) => (
                 <React.Fragment key={index}>
-                  <div className="search-column">
-                    <td>
-                      {group.map((food) => (
-                        <React.Fragment key={food}>
-                          <>
-                            <input
-                              type="checkbox"
-                              id={food}
-                              name="selectFood"
-                              value={food}
-                              onChange={(e) => handleInputChange(e)}
-                            />
-                            <label key={food} htmlFor={food}>
-                              {food}　
-                            </label>
-                            <br />
-                          </>
-                        </React.Fragment>
-                      ))}
-                    </td>
-                    <td>
-                      {group.map((food) => (
-                        <React.Fragment key={food}>
-                          <>
-                            <select
-                              name={food}
-                              onChange={(e) =>
-                                handleQuantityChange(
-                                  food,
-                                  Number(e.target.value)
-                                )
-                              }
-                            >
-                              {[...Array(11).keys()].map((num) => (
-                                <option key={num} name={food} value={num}>
-                                  {num}
-                                </option>
-                              ))}
-                            </select>
-                            <label>　　</label>
+                  {/* <div className="search-column"> */}
+                  <td>
+                    {group.map((food) => (
+                      <React.Fragment key={food}>
+                        <>
+                          <input type="checkbox" id={food} name="selectFood" value={food} onChange={(e) => handleInputChange(e)} />
+                          <label key={food} htmlFor={food}>
+                            {food}
+                          </label>
+                          <br />
+                        </>
+                      </React.Fragment>
+                    ))}
+                  </td>
+                  <td>
+                    {group.map((food) => (
+                      <React.Fragment key={food}>
+                        <>
+                          <select name={food} onChange={(e) => handleQuantityChange(food, Number(e.target.value))}>
+                            {[...Array(11).keys()].map((num) => (
+                              <option key={num} name={food} value={num}>
+                                {num}
+                              </option>
+                            ))}
+                          </select>
+                          {/* <label></label> */}
 
-                            <br />
-                          </>
-                        </React.Fragment>
-                      ))}
-                    </td>
-                  </div>
+                          <br />
+                        </>
+                      </React.Fragment>
+                    ))}
+                  </td>
+                  {/* </div> */}
                 </React.Fragment>
               ))}
             </tr>

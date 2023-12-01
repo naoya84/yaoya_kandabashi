@@ -1,5 +1,49 @@
+.home-container {
+  width: 100%;
+  height: 100%;
+  position: relative;
+}
+
+.home-login {
+  position: absolute;
+  height: 80%;
+  width: 60%;
+  background: rgba(255, 255, 255, 0.8);
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, -50%);
+  display: flex;
+  flex-direction: column;
+  padding: 2% 10%;
+  border-radius: 5px;
+}
+
+.login-title {
+  margin-bottom: 30px;
+}
+
 img {
   width: 100%;
   object-fit: cover;
   aspect-ratio: 5 / 2;
+}
+
+.login-text {
+  margin-bottom: 10px;
+  color: rgb(87, 87, 87);
+}
+
+.login-input {
+  padding: 5px;
+  margin-bottom: 20px;
+}
+
+.login-btn {
+  margin-top: 20px;
+  padding: 10px;
+  background: rgb(33, 45, 156);
+  color: white;
+  border: none;
+  cursor: pointer;
+  border-radius: 3px;
 }

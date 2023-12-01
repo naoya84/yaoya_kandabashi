@@ -2,29 +2,12 @@ import { Link } from 'react-router-dom';
 import React, { useState, useEffect } from 'react';
 import axios from 'axios';
 import '../assets/style/Result.css';
+import storeImg from '../assets/image/store.jpg';
+import shoppingImg from '../assets/image/shopping.jpg';
 
 export default function Result() {
   //   const { team } = props;
   const [store, setStore] = useState([]);
-
-  // const createMap = () => {
-  //   //錦糸町駅の緯度・経度
-  //   const position = new google.maps.LatLng(35.696802, 139.814136);
-
-  //   //地図を作成
-  //   const options = {
-  //     zoom: 15,
-  //     center: position,
-  //     mapTypeId: google.maps.MapTypeId.ROADMAP,
-  //   };
-  //   const map1 = new google.maps.Map(document.getElementById('map1'), options);
-
-  //   //マーカーの作成
-  //   const marker = new google.maps.Marker({
-  //     position: position,
-  //     map: map1,
-  //   });
-  // };
 
   useEffect(() => {
     axios
@@ -40,29 +23,51 @@ export default function Result() {
 
   return (
     <>
-      <h1>店一覧</h1>
-      <table>
-        <thead>
-          <tr>
-            <th>店名</th>
-            <th>マップ</th>
-          </tr>
-        </thead>
-        <tbody>
-          {store.map((obj, index) => (
-            <React.Fragment key={index}>
-              <tr>
-                <td>
-                  <Link to={`/result/store/${obj.id}`} className="Link">
-                    {obj.storeName}
-                  </Link>
-                </td>
-                <td>後で地図を表示</td>
-              </tr>
-            </React.Fragment>
-          ))}
-        </tbody>
-      </table>
+      <div className="page-title">RESULT</div>
+      <div className="result-container">
+        <div className="shopping-list" style={{ backgroundImage: `url(${shoppingImg})` }}>
+          <h1>買い物リスト</h1>
+          <div className="shopping-box">
+            <label>
+              <input type="checkbox" />
+              りんご
+            </label>
+            <label>
+              <input type="checkbox" />
+              バナナ
+            </label>
+            <label>
+              <input type="checkbox" />
+              レモン
+            </label>
+            <label>
+              <input type="checkbox" />
+              りんご
+            </label>
+            <label>
+              <input type="checkbox" />
+              バナナ
+            </label>
+            <label>
+              <input type="checkbox" />
+              レモン
+            </label>
+          </div>
+        </div>
+        <div className="store-list" style={{ backgroundImage: `url(${storeImg})` }}>
+          <h1>ショップの提案</h1>
+          <div className="store-box">
+            {store.map((obj, index) => (
+              <React.Fragment key={index}>
+                {/* <Link to={{ pathname: `/result/store/${obj.id}`, state: { store: 'obj.storeName' } }} className="Link"> */}
+                <Link to={`/result/store/${obj.id}`} state={{ storeName: obj.storeName }} className="Link">
+                  {obj.storeName}
+                </Link>
+              </React.Fragment>
+            ))}
+          </div>
+        </div>
+      </div>
     </>
   );
 }
