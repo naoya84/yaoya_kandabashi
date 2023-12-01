@@ -89,6 +89,7 @@ export default function Search() {
 
   return (
     <div className="search-container">
+      <div className="page-title">SEARCH</div>
       <h1>商品選択</h1>
       <form onSubmit={handleSubmit}>
         <table className="shoppingList">
