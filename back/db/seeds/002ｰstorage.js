@@ -38,7 +38,7 @@ exports.seed = function (knex) {
 		price: 120,
 	});
 	foodsTemplate.forEach((item, i) => {
-		if (i % 2 === 0) {
+		if (i % 2 === 1) {
 			storageSample.push({
 				storeId: 2,
 				productName: item,
@@ -58,7 +58,7 @@ exports.seed = function (knex) {
 		price: 50,
 	});
 	foodsTemplate.forEach((item, i) => {
-		if (i % 2 === 1) {
+		if (i % 2 === 0) {
 			storageSample.push({
 				storeId: 3,
 				productName: item,

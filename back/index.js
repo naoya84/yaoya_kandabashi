@@ -11,50 +11,28 @@ app.use(bodyParser.json());
 app.use(express.json()); //JSON形式のファイルを扱えるようにする
 app.use(cors());
 
-// app.use(express.static('public'));
-
-let date = new Date();
 
 //購入する商品を送信する　-> shipping_list（id:既存＋１,userId:現状持って来れる？今後はどうとる？,storeId:なにを基準？,productName,piece,flag,time）に追加する。
 app.post('/api/customers/:id/shopping_list', async (req, res) => {
   console.log('postリクエスト受け取り----------');
 
-  //受け取った内容をdataに格納
-  const data = req.body;
-  console.log('🚀 ~ file: index.js:14 ~ app.post ~ data:', data);
-
-  //全アイテム共通の変数を作成
+  //受け取った内容
+  const bodyArr = req.body;
   const customerId = req.params.id;
-  console.log('🚀 ~ file: index.js:12 ~ app.post ~ customerId:', customerId);
-  const flag = false; //デフォルトは全てfalseにする
-  console.log('🚀 ~ file: index.js:22 ~ app.post ~ flag:', flag);
-  const time = date.toLocaleString();
-  console.log('🚀 ~ file: index.js:24 ~ app.post ~ time:', time);
-
-  //アイテム数を確認
-  const Num = data.length;
 
   //アイテムの数だけ、for文でshopping_listに追加していく
-  for (let i = 0; i < Num; i++) {
+  for (let i = 0; i < bodyArr.length; i++) {
     //req.bodyから必要情報取り出し
-    console.log('data',data);
-    const shopping = data[i].shopping;
-    const amount = data[i].count;
-
-    //現在のshopping_listからidが１番大きいものを抜き出して今から登録するアイテムのidを設定
-    let id;
-    await knex('shopping_list')
-      .max('id as maxId')
-      .then(([result]) => {
-        id = result.maxId + 1;
-        console.log('🚀 ~ file: index.js:28 ~ app.post ~ id:', id);
-      });
+    const shopping = bodyArr[i].shopping;
+    const quantity = bodyArr[i].quantity;
+    const unit = bodyArr[i].unit;
 
     //最適なstoreIdを設定する(まずは一番安いものを持ってくる)
     let minPrice;
     await knex('storage')
       .where('productName', shopping)
-      .where('piece', '>', amount)
+      .where('stock', '>', quantity)
+      .where('unit', '=', unit)
       .min('price as minPrice')
       .then(([result]) => {
         minPrice = result.minPrice;
@@ -76,13 +54,12 @@ app.post('/api/customers/:id/shopping_list', async (req, res) => {
     //knexでデータ追加    
     await knex('shopping_list')
       .insert({
-        id: id,
         userId: customerId,
         storeId: storeId,
         productName: shopping,
-        piece: amount,
-        flag: flag,
-        time: time,
+        quantity: quantity,
+        flag: false,
+        time: new Date(),
       })
       .then(() => {
         console.log('post対応完了');
