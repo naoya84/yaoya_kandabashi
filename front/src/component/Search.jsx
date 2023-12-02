@@ -5,7 +5,7 @@ import '../assets/style/Search.css';
 import foodsTemplate from '../assets/foodsTemplate';
 
 export default function Search() {
-	const [foodsSelected, setFoodsSelected] = useState([]); 
+	const [foodsSelected, setFoodsSelected] = useState([]);
 	const navigate = useNavigate();
 	const { isAuthenticated, userId, userName } = useAuth();
 
@@ -14,30 +14,29 @@ export default function Search() {
 		console.log('foodsTemplate', foodsTemplate);
 	}, []);
 
-  useEffect(() => {
-    const initialFoods = foodsTemplate.flatMap(foodObj => {
-        const category = Object.keys(foodObj)[0];
-        const items = foodObj[category].map(item => ({
-            category,
-            name: item,
-            quantity: 0,
-            unit: '個', // または初期単位を設定
-        }));
-        return items;
-    });
+	useEffect(() => {
+		const initialFoods = foodsTemplate.flatMap((foodObj) => {
+			const category = Object.keys(foodObj)[0];
+			const items = foodObj[category].map((item) => ({
+				category,
+				name: item,
+				quantity: 0,
+				unit: '個', // または初期単位を設定
+			}));
+			return items;
+		});
 
-    setFoodsSelected(initialFoods);
-}, []);
-
+		setFoodsSelected(initialFoods);
+	}, []);
 
 	const handleQuantityChange = (item, e) => {
 		const updatedFoods = foodsSelected.map((food) => {
 			if (food.name === item) {
-				return { ...food, quantity: e.target.value };
+				return { ...food, quantity: parseInt(e.target.value) };
 			}
 			return food;
 		});
-    console.log('updatedFoods', updatedFoods);
+		console.log('updatedFoods', updatedFoods);
 		setFoodsSelected(updatedFoods);
 	};
 
@@ -48,7 +47,7 @@ export default function Search() {
 			}
 			return food;
 		});
-    console.log('updatedFoods', updatedFoods);
+		console.log('updatedFoods', updatedFoods);
 		setFoodsSelected(updatedFoods);
 	};
 
@@ -93,7 +92,17 @@ export default function Search() {
 
 	const handleSubmit = async (e) => {
 		e.preventDefault();
-		console.log('foodsSelected', foodsSelected); // データをコンソールに表示
+		
+    //送信用のデータを作る
+		const foodsForSend = foodsSelected
+    .filter((obj) => obj.quantity > 0)
+    .map((food) => {
+      return {
+        shopping: food.name,
+        quantity: food.quantity,
+        unit: food.unit,
+      };
+    });
 
 		try {
 			const url = import.meta.env.VITE_DEVELOPMENT_BACKEND_URL || import.meta.env.VITE_PRODUCTION_BACKEND_URL;
@@ -102,7 +111,7 @@ export default function Search() {
 				headers: {
 					'Content-Type': 'application/json',
 				},
-				body: JSON.stringify(foodsSelected),
+				body: JSON.stringify(foodsForSend),
 			});
 
 			if (response.ok) {
@@ -119,12 +128,28 @@ export default function Search() {
 		}
 	};
 
+	const handleSubmitTest = (e) => {
+		e.preventDefault();
+
+		//送信用のデータを作る
+		const foodsForSend = foodsSelected
+			.filter((obj) => obj.quantity > 0)
+			.map((food) => {
+				return {
+					shopping: food.name,
+					quantity: food.quantity,
+					unit: food.unit,
+				};
+			});
+		console.log('送信用データ', foodsForSend);
+	};
+
 	return (
 		<div className='search-container'>
 			<div className='page-title'>SEARCH</div>
 			<h1>商品選択</h1>
 			<div className='category_container'>{makeCategoryBoxes()}</div>
-			<button className='search-button' onClick={handleSubmit}>
+			<button className='search-button' onClick={handleSubmitTest}>
 				登録
 			</button>
 		</div>
