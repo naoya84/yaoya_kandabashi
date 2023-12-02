@@ -1,19 +1,19 @@
 exports.seed = function (knex) {
   // 25件の店名データを準備
   const storeNames = [
-    "プライムツリー赤池",
-    "ワークマン",
-    "セブンイレブン",
-    "ローソン",
-    "ららぽーと愛知東郷店",
-    "酒ゃビッグ",
-    "イオンモール長久手",
-    "マックスバリュー米野木店",
-    "CAINZ",
-    "DAISO",
-    "3COINS",
-    "バロー",
-    "エプロン",
+    'イオンモール長久手',
+    'マックスバリュー米野木店',
+    'バロー',
+    'プライムツリー赤池',
+    'ワークマン',
+    'セブンイレブン',
+    'ローソン',
+    'ららぽーと愛知東郷店',
+    '酒ゃビッグ',
+    'CAINZ',
+    'DAISO',
+    '3COINS',
+    'エプロン',
   ];
 
   const coordinate = [
@@ -41,10 +41,10 @@ exports.seed = function (knex) {
   }));
 
   // テーブル内の既存データを削除
-  return knex("store_list")
+  return knex('store_list')
     .del()
     .then(function () {
       // 新しいシードデータを挿入
-      return knex("store_list").insert(seedData);
+      return knex('store_list').insert(seedData);
     });
 };

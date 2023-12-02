@@ -3,11 +3,11 @@
  * @returns { Promise<void> }
  */
 exports.up = function (knex) {
-  return knex.schema.createTable("store_list", function (table) {
-    table.integer("id", 32).primary();
-    table.string("storeName", 32);
-    table.decimal("northLatitude", 32, 4);
-    table.decimal("eastLongitude", 32, 4);
+  return knex.schema.createTable('store_list', function (table) {
+    table.integer('id', 32).primary();
+    table.string('storeName', 32);
+    table.decimal('northLatitude', 32, 4);
+    table.decimal('eastLongitude', 32, 4);
   });
 };
 
@@ -16,5 +16,5 @@ exports.up = function (knex) {
  * @returns { Promise<void> }
  */
 exports.down = function (knex) {
-  return knex.schema.dropTable("store_list");
+  return knex.schema.dropTable('store_list');
 };

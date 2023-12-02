@@ -27,7 +27,7 @@ exports.seed = function (knex) {
       storeId: 2,
       productName: '牛肉',
       piece: 300,
-      unit: 'g',
+      unit: 'パック',
       flag: true,
       time: new Date(), // 現在のタイムスタンプ
     },

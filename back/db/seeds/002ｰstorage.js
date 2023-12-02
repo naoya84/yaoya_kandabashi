@@ -107,32 +107,33 @@ exports.seed = function (knex) {
   // const productShapes = ["1本", "1/2本", "1/2玉", "1玉", "1束", "2束"];
   const storageSample = [];
   const foodsTemplate = [
-    { item: 'かぼちゃ', unit: '1/2個', stock: 1, price: 100 },
-    { item: '人参', unit: '本', stock: 1, price: 100 },
-    { item: '玉ねぎ', unit: '個', stock: 1, price: 100 },
-    { item: 'りんご', unit: '個', stock: 1, price: 100 },
-    { item: 'バナナ', unit: '袋', stock: 1, price: 100 },
-    { item: 'ぶどう', unit: '個', stock: 1, price: 100 },
-    { item: '豚肉', unit: '', stock: 1, price: 100 },
-    { item: '鶏肉', unit: '', stock: 1, price: 100 },
-    { item: '牛肉', unit: '', stock: 1, price: 100 },
-    { item: '鮭', unit: '', stock: 1, price: 100 },
-    { item: 'さんま', unit: '', stock: 1, price: 100 },
-    { item: 'あじ', unit: '', stounit: '', stock: 1, price: 100 },
-    { item: '醤油', unit: '', stock: 1, price: 100 },
-    { item: 'みりん', unit: '', stock: 1, price: 100 },
+    { item: 'かぼちゃ', unit: '1/2個', stock: 50, price: 100 },
+    { item: '人参', unit: '本', stock: 200, price: 100 },
+    { item: '玉ねぎ', unit: '個', stock: 500, price: 80 },
+    { item: 'りんご', unit: '個', stock: 100, price: 100 },
+    { item: 'バナナ', unit: '袋', stock: 150, price: 300 },
+    { item: 'ぶどう', unit: '個', stock: 100, price: 1000 },
+    { item: '豚肉', unit: 'パック', stock: 400, price: 300 },
+    { item: '鶏肉', unit: 'パック', stock: 500, price: 200 },
+    { item: '牛肉', unit: 'パック', stock: 300, price: 400 },
+    { item: '鮭', unit: '匹', stock: 200, price: 400 },
+    { item: 'さんま', unit: '匹', stock: 100, price: 200 },
+    { item: 'あじ', unit: '匹', stock: 150, price: 150 },
+    { item: '醤油', unit: '本', stock: 80, price: 350 },
+    { item: 'みりん', unit: '本', stock: 50, price: 300 },
   ];
-
-  // foodsTemplate.forEach((item, i) => {
-  //   storageSample.push({
-  //     id: i,
-  //     storeId: 1,
-  //     productName: item,
-  //     unit: '本',
-  //     stock: 100,
-  //     price: 120,
-  //   });
-  // });
+  for (let i = 1; i <= 3; i++) {
+    foodsTemplate.forEach((foodInfo) => {
+      storageSample.push({
+        // id: i,
+        storeId: i,
+        productName: foodInfo.item,
+        unit: foodInfo.unit,
+        stock: foodInfo.stock,
+        price: foodInfo.price,
+      });
+    });
+  }
 
   // const storageSample=[{
   //   id:1,
