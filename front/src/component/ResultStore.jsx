@@ -3,12 +3,14 @@ import React, { useState, useEffect } from 'react';
 import axios from 'axios';
 import '../assets/style/ResultStore.css';
 import mapImg from '../assets/image/map.jpg';
+import { useAuth } from '../contexts/AuthContext';
 
 export default function ResultStore() {
   const { storeId } = useParams();
   const [storeProductDetails, setStoreProductDetails] = useState([]);
   const location = useLocation();
   const [storeName, setStoreName] = useState();
+  const { isAuthenticated, userId, userName } = useAuth();
 
   useEffect(() => {
     setStoreName(location.state.storeName);
@@ -23,14 +25,32 @@ export default function ResultStore() {
     //     alert('取得に失敗しました');
     //   });
 
+    const fetchData_param = async (storeId) => {
+      try {
+        const url = import.meta.env.VITE_DEVELOPMENT_BACKEND_URL || import.meta.env.VITE_PRODUCTION_BACKEND_URL;
+        const response = await fetch(url + `/api/customers/${userId}/result/shopping?store_id=${storeId}`);
+        const data = await response.json();
+  
+        if (response.ok) {
+          console.log('post_ok', response, data);
+          setStoreProductDetails(data);
+        } else {
+          console.log('post_ng', response);
+          return [];
+        }
+      } catch (error) {
+        console.log('error', error);
+      }
+    };
+    fetchData_param(storeId);
     // 以下、レスポンス来たと仮定して。。。
-    const arr = [
-      { id: 3, storeId: 3, productName: '豚肉', piece: 10, unit: '個', flag: false, storeName: 'セブンイレブン' },
-      { id: 4, storeId: 3, productName: 'あじ', piece: 2, unit: '個', flag: false, storeName: 'セブンイレブン' },
-      { id: 5, storeId: 3, productName: '塩', piece: 3, unit: '個', flag: false, storeName: 'セブンイレブン' },
-    ];
+    // const arr = [
+    //   { id: 3, storeId: 3, productName: '豚肉', piece: 10, unit: '個', flag: false, storeName: 'セブンイレブン' },
+    //   { id: 4, storeId: 3, productName: 'あじ', piece: 2, unit: '個', flag: false, storeName: 'セブンイレブン' },
+    //   { id: 5, storeId: 3, productName: '塩', piece: 3, unit: '個', flag: false, storeName: 'セブンイレブン' },
+    // ];
 
-    setStoreProductDetails(arr);
+    // setStoreProductDetails(arr);
   }, []);
 
   // console.log(storeProductDetails);

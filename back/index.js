@@ -103,16 +103,19 @@ app.get('/api/customers/:id/result/shopping', async (req, res) => {
 app.patch('/api/udate_shopping_status/:id', (req, res) => {
 	try {
 		const id = req.params.id;
-		knex('shopping_list')
-			.where('id', id)
-			.update({ flag: true })
-			.then(() => {
-				res.status(200).json({ message: `ID ${id} のflagを ${flag} に更新しました` });
-			})
-			.catch((error) => {
-				console.error('更新エラー:', error);
-			});
+		const idArr = req.body;
+
+		const promiseArr = idArr.map(id=>
+			knex('shopping_list')
+				.where({id: id})
+				.update({ flag: true })
+		)
+		console.log('promiseArr1',promiseArr);
+		Promise.all(promiseArr).then(res => res)
+			
+		res.status(200).end();
 	} catch (error) {
+		console.log('promisError',error)
 		res.status(500).send(error);
 	}
 });
