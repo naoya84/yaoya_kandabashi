@@ -1,129 +1,79 @@
 exports.seed = function (knex) {
-  // ダミーデータの生成
-  let seedData = [];
-  let id = 1;
-  const foodItems = [
-    "リンゴ",
-    "バナナ",
-    "オレンジ",
-    "ブドウ",
-    "桃",
-    "メロン",
-    "キウイ",
-    "マンゴー",
-    "パイナップル",
-    "イチゴ",
-    "トマト",
-    "キャベツ",
-    "レタス",
-    "ほうれん草",
-    "ナス",
-    "ピーマン",
-    "ジャガイモ",
-    "さつまいも",
-    "かぼちゃ",
-    "アボカド",
-    "牛肉",
-    "豚肉",
-    "鶏肉",
-    "ラム肉",
-    "ベーコン",
-    "ハム",
-    "サーモン",
-    "マグロ",
-    "いわし",
-    "えび",
-    "卵",
-    "牛乳",
-    "ヤクルト",
-    "チーズ",
-    "バター",
-    "豆腐",
-    "納豆",
-    "味噌",
-    "しょうゆ",
-    "醤油",
-    "パスタ",
-    "米",
-    "パン",
-    "うどん",
-    "そば",
-    "ラーメン",
-    "クスクス",
-    "キノア",
-    "オートミール",
-    "コーンフレーク",
-    "アーモンド",
-    "カシューナッツ",
-    "くるみ",
-    "ピーナッツ",
-    "ひまわりの種",
-    "オリーブオイル",
-    "ココナッツオイル",
-    "ごま油",
-    "菜種油",
-    "ひまわり油",
-    "ニンニク",
-    "しょうが",
-    "ネギ",
-    "玉ねぎ",
-    "にんじん",
-    "大根",
-    "セロリ",
-    "きゅうり",
-    "茄子",
-    "ゴーヤ",
-    "チョコレート",
-    "クッキー",
-    "ケーキ",
-    "ドーナツ",
-    "パイ",
-    "アイスクリーム",
-    "プリン",
-    "ゼリー",
-    "ヨーグルト",
-    "キャンディ",
-    "コーヒー豆",
-    "紅茶葉",
-    "緑茶",
-    "ウーロン茶",
-    "ハーブティー",
-    "ココア",
-    "砂糖",
-    "はちみつ",
-    "メープルシロップ",
-    "ジャム",
-    "しいたけ",
-    "まいたけ",
-    "エノキ",
-    "塩昆布",
-    "トリュフ",
-    "ポルチーニ",
-    "キクラゲ",
-    "ひらたけ",
-    "エリンギ",
-    "なめこ",
-  ];
-  const productShapes = ["1本", "1/2本", "1/2玉", "1玉", "1束", "2束"];
+	const storageSample = [];
+	const foodsTemplate = [
+		'かぼちゃ',
+		'人参',
+		'玉ねぎ',
+		'りんご',
+		'バナナ',
+		'ぶどう',
+		'豚肉',
+		'鶏肉',
+		'牛肉',
+		'鮭',
+		'さんま',
+		'あじ',
+		'塩',
+		'醤油',
+		'みりん',
+	];
 
-  foodItems.forEach((item) => {
-    productShapes.forEach((shape) => {
-      seedData.push({
-        id: id++,
-        storeId: Math.floor(Math.random() * 25) + 1, // 1から25までのランダムな店舗ID
-        productName: item,
-        productShape: shape,
-        piece: Math.floor(Math.random() * 100) + 1, // 在庫数は1から100のランダムな数値
-        price: Math.floor(Math.random() * 5000) + 500, // 価格は500から5000のランダムな数値
-      });
-    });
-  });
+	//店舗１
+	foodsTemplate.forEach((item, i) => {
+		storageSample.push({
+			storeId: 1,
+			productName: item,
+			unit: '本',
+			stock: 100,
+			price: 120,
+		});
+	});
 
-  // テーブル内の既存データを削除
-  return knex("storage")
-    .del()
-    .then(function () {
-      // 新しいシードデータを挿入
-      return knex("storage").insert(seedData);
-    });
+	//店舗２
+	storageSample.push({
+		storeId: 2,
+		productName: '人参',
+		unit: '本',
+		stock: 80,
+		price: 120,
+	});
+	foodsTemplate.forEach((item, i) => {
+		if (i % 2 === 0) {
+			storageSample.push({
+				storeId: 2,
+				productName: item,
+				unit: '匹',
+				stock: 200,
+				price: 240,
+			});
+		}
+	});
+
+	//店舗３
+	storageSample.push({
+		storeId: 3,
+		productName: '人参',
+		unit: '本',
+		stock: 3,
+		price: 50,
+	});
+	foodsTemplate.forEach((item, i) => {
+		if (i % 2 === 1) {
+			storageSample.push({
+				storeId: 3,
+				productName: item,
+				unit: '個',
+				stock: 200,
+				price: 240,
+			});
+		}
+	});
+
+	// テーブル内の既存データを削除
+	return knex('storage')
+		.del()
+		.then(function () {
+			// 新しいシードデータを挿入
+			return knex('storage').insert(storageSample);
+		});
 };

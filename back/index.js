@@ -5,7 +5,6 @@ const cors = require('cors');
 const path = require('path');
 
 const bodyParser = require('body-parser');
-const { error } = require('console');
 app.use(bodyParser.urlencoded({ extended: true }));
 app.use(bodyParser.json());
 
@@ -145,30 +144,6 @@ app.get('/api/store', async (req, res) => {
     });
 });
 
-//ある店が持っている商品を取得する
-
-//あるユーザーの情報を取得する
-
-//あるユーザーの登録履歴を取得する
-
-//登録した商品リストを削除する
-
-// app.get("/", async (req, res) => {
-//   const user = await knex
-//     .select()
-//     .from("game")
-//     .then((data) => {
-//       return data;
-//     })
-//     .then((data) => {
-//       res.send(data); //dataは配列
-//     });
-// });
-
-// app.get('/', (req, res) => {
-//   res.status(200);
-//   res.sendFile('/index.html');
-// });
 
 app.use(express.static(path.resolve(__dirname, '../front', 'dist')));
 app.get('/*', (req, res) => {
