@@ -9,7 +9,7 @@ exports.up = function (knex) {
 		table.integer('storeId', 32);
 		table.string('productName', 32);
 		table.string('unit', 32);
-		table.integer('quantity', 32);
+		table.integer('piece', 32);
 		table.boolean('flag');
 		table.timestamp('time');
 	});
