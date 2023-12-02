@@ -5,176 +5,137 @@ const cors = require('cors');
 const path = require('path');
 
 const bodyParser = require('body-parser');
-const { error } = require('console');
 app.use(bodyParser.urlencoded({ extended: true }));
 app.use(bodyParser.json());
 
 app.use(express.json()); //JSON形式のファイルを扱えるようにする
 app.use(cors());
 
-// app.use(express.static('public'));
-
-let date = new Date();
-
 //購入する商品を送信する　-> shipping_list（id:既存＋１,userId:現状持って来れる？今後はどうとる？,storeId:なにを基準？,productName,piece,flag,time）に追加する。
 app.post('/api/customers/:id/shopping_list', async (req, res) => {
-  console.log('postリクエスト受け取り----------');
+	console.log('postリクエスト受け取り----------');
 
-  //受け取った内容をdataに格納
-  const data = req.body;
-  console.log('🚀 ~ file: index.js:14 ~ app.post ~ data:', data);
+	//受け取った内容
+	const bodyArr = req.body;
+	const customerId = req.params.id;
 
-  //全アイテム共通の変数を作成
-  const customerId = req.params.id;
-  console.log('🚀 ~ file: index.js:12 ~ app.post ~ customerId:', customerId);
-  const flag = false; //デフォルトは全てfalseにする
-  console.log('🚀 ~ file: index.js:22 ~ app.post ~ flag:', flag);
-  const time = date.toLocaleString();
-  console.log('🚀 ~ file: index.js:24 ~ app.post ~ time:', time);
+	try {
+    //アイテムの数だけ、for文でshopping_listに追加していく
+		for (let i = 0; i < bodyArr.length; i++) {
+			//req.bodyから必要情報取り出し
+			const shopping = bodyArr[i].shopping;
+			const quantity = bodyArr[i].quantity;
+			const unit = bodyArr[i].unit;
 
-  //アイテム数を確認
-  const Num = data.length;
+			//最適なstoreIdを設定する(まずは一番安いものを持ってくる)
+			let minPrice;
+			await knex('storage')
+				.where('productName', shopping)
+				.where('stock', '>', quantity)
+				.where('unit', '=', unit)
+				.min('price as minPrice')
+				.then(([result]) => {
+					minPrice = result.minPrice;
+				});
 
-  //アイテムの数だけ、for文でshopping_listに追加していく
-  for (let i = 0; i < Num; i++) {
-    //req.bodyから必要情報取り出し
-    console.log('data',data);
-    const shopping = data[i].shopping;
-    const amount = data[i].count;
+			//最適なstoreIdを設定する(minPriceと同じstoreIdを探す)
+			let storeId;
+			await knex('storage')
+				.where({ productName: shopping, price: minPrice })
+				.select('storeId')
+				.then(([result]) => {
+					storeId = result.storeId;
+				});
 
-    //現在のshopping_listからidが１番大きいものを抜き出して今から登録するアイテムのidを設定
-    let id;
-    await knex('shopping_list')
-      .max('id as maxId')
-      .then(([result]) => {
-        id = result.maxId + 1;
-        console.log('🚀 ~ file: index.js:28 ~ app.post ~ id:', id);
-      });
-
-    //最適なstoreIdを設定する(まずは一番安いものを持ってくる)
-    let minPrice;
-    await knex('storage')
-      .where('productName', shopping)
-      .where('piece', '>', amount)
-      .min('price as minPrice')
-      .then(([result]) => {
-        minPrice = result.minPrice;
-        console.log('🚀 ~ file: index.js:39 ~ app.post ~ minPrice:', minPrice);
-      });
-
-    //最適なstoreIdを設定する(minPriceと同じstoreIdを探す)
-    let storeId;
-    await knex('storage')
-      .where({ productName: shopping, price: minPrice })
-      .select('storeId')
-      .then(([result]) => {
-        storeId = result.storeId;
-        console.log('🚀 ~ file: index.js:47 ~ app.post ~ storeId:', storeId);
-      });
-
-    //１つのアイテムに対して安い順番で３候補持ってきて、場所をまとめたパターンと最安値パターンの２ルートは水曜日以降で作りたい。
-
-    //knexでデータ追加    
-    await knex('shopping_list')
-      .insert({
-        id: id,
-        userId: customerId,
-        storeId: storeId,
-        productName: shopping,
-        piece: amount,
-        flag: flag,
-        time: time,
-      })
-      .then(() => {
-        console.log('post対応完了');
-        res.status(200).send('post対応完了');
-      })
-      .catch(error=>
-        console.log('error',error)
-      );
-  }
-});
-
-//あるユーザーが送信した商品が購入できる店を取得する
-app.get('/api/customers/:id/result/store', async (req, res) => {
-  //カスタマーidを取得
-  const customerId = req.params.id;
-  //フロントに渡す変数を定義
-  let resultArray;
-  await knex('shopping_list')
-    .where({ userId: customerId, flag: false })
-    .select('store_list.id', 'store_list.storeName')
-    .join('store_list', 'shopping_list.storeId', '=', 'store_list.id')
-    .then((data) => {
-      resultArray = data;
-    })
-    .then(() => {
-      console.log('🚀 ~ file: index.js:87 ~ app.get ~ result:', resultArray);
-      res.status(200).send(resultArray);
-    });
+			//knexでデータ追加
+			await knex('shopping_list')
+				.insert({
+					userId: customerId,
+					storeId: storeId,
+					productName: shopping,
+					piece: quantity,
+					unit: unit,
+					flag: false,
+					time: new Date(),
+				})
+				.then(() => {
+					console.log('post対応完了');
+				});
+		}
+		res.status(200).send('post対応完了');
+	} catch (error) {
+		console.error(error);
+		return res.status(500).send('エラーが発生しました');
+	}
 });
 
 //あるユーザーが提案された店の商品を取得する
 app.get('/api/customers/:id/result/shopping', async (req, res) => {
-  //storeIdを取得
-  const storeId = req.query.store_id;
-  console.log('🚀 ~ file: index.js:105 ~ app.get ~ storeId:', storeId);
-  const customerId = req.params.id;
-  console.log('🚀 ~ file: index.js:108 ~ app.get ~ customerId:', customerId);
+	const userId = req.params.id;
 
-  await knex('shopping_list')
-    .where({ userId: customerId, flag: false, storeId: storeId })
-    .select('productName')
-    // .join("storage", "shopping_list.storeId", "=", "storage.storeId")
-    .then((data) => {
-      console.log('🚀 ~ file: index.js:114 ~ .then ~ data:', data);
-      res.status(200).send(data);
-    });
+	try {
+		const query = knex('shopping_list')
+			.select(
+				'shopping_list.id',
+				'shopping_list.storeId',
+				'shopping_list.productName',
+				'shopping_list.piece',
+				'shopping_list.unit',
+				'shopping_list.flag',
+				'store_list.storeName'
+			)
+			.join('store_list', 'shopping_list.storeId', '=', 'store_list.id')
+			.where('shopping_list.userId', userId);
+
+		if (req.query.store_id) {
+			query.andWhere('shopping_list.storeId', req.query.store_id);
+		}
+
+		const data = await query;
+		res.status(200).send(data);
+	} catch (error) {
+		console.error(error);
+		res.status(400).send(error.message); // エラーメッセージを送信
+	}
+});
+
+//あるユーザーが送信した商品が購入できる店を取得する
+app.get('/api/customers/:id/result/store', async (req, res) => {
+	//カスタマーidを取得
+	const customerId = req.params.id;
+	//フロントに渡す変数を定義
+	let resultArray;
+	await knex('shopping_list')
+		.where({ userId: customerId, flag: false })
+		.select('store_list.id', 'store_list.storeName')
+		.join('store_list', 'shopping_list.storeId', '=', 'store_list.id')
+		.then((data) => {
+			resultArray = data;
+		})
+		.then(() => {
+			console.log('🚀 ~ file: index.js:87 ~ app.get ~ result:', resultArray);
+			res.status(200).send(resultArray);
+		});
 });
 
 //全てのお店の情報を取得する
 app.get('/api/store', async (req, res) => {
-  await knex
-    .select()
-    .from('store_list')
-    .then((data) => {
-      return data;
-    })
-    .then((data) => {
-      res.status(200).send(data); //dataは配列
-    });
+	await knex
+		.select()
+		.from('store_list')
+		.then((data) => {
+			return data;
+		})
+		.then((data) => {
+			res.status(200).send(data); //dataは配列
+		});
 });
-
-//ある店が持っている商品を取得する
-
-//あるユーザーの情報を取得する
-
-//あるユーザーの登録履歴を取得する
-
-//登録した商品リストを削除する
-
-// app.get("/", async (req, res) => {
-//   const user = await knex
-//     .select()
-//     .from("game")
-//     .then((data) => {
-//       return data;
-//     })
-//     .then((data) => {
-//       res.send(data); //dataは配列
-//     });
-// });
-
-// app.get('/', (req, res) => {
-//   res.status(200);
-//   res.sendFile('/index.html');
-// });
 
 app.use(express.static(path.resolve(__dirname, '../front', 'dist')));
 app.get('/*', (req, res) => {
-  res.sendFile(path.join(__dirname, '../front', 'dist', 'index.html'));
+	res.sendFile(path.join(__dirname, '../front', 'dist', 'index.html'));
 });
 
 app.listen(4242, () => {
-  console.log('server on PORT4242');
+	console.log('server on PORT4242');
 });
