@@ -5,24 +5,48 @@ import '../assets/style/ResultStore.css';
 import mapImg from '../assets/image/map.jpg';
 
 export default function ResultStore() {
-  //   const { team } = props;
-  const [shopping, setShopping] = useState([]);
   const { storeId } = useParams();
-  const [storeName, setStoreName] = useState();
+  const [storeProductDetails, setStoreProductDetails] = useState([]);
   const location = useLocation();
+  const [storeName, setStoreName] = useState();
 
   useEffect(() => {
-    axios
-      .get(`/api/customers/${3}/result/shopping?store_id=${storeId}`) //後でユーザーIDに書き換え
-      .then((response) => {
-        setShopping(response.data);
-        setStoreName(location.state.storeName);
-      })
-      .catch((error) => {
-        console.log(error);
-        alert('取得に失敗しました');
-      });
+    setStoreName(location.state.storeName);
+    // axios
+    //   .get(`/api/customers/${3}/result/shopping?store_id=${storeId}`) //後でユーザーIDに書き換え
+    //   .then((response) => {
+    //     console.log('response', response.data);
+    //     setStoreProductDetails(response.data);
+    //   })
+    //   .catch((error) => {
+    //     console.log(error);
+    //     alert('取得に失敗しました');
+    //   });
+
+    // 以下、レスポンス来たと仮定して。。。
+    const arr = [
+      { id: 3, storeId: 3, productName: '豚肉', piece: 10, unit: '個', flag: false, storeName: 'セブンイレブン' },
+      { id: 4, storeId: 3, productName: 'あじ', piece: 2, unit: '個', flag: false, storeName: 'セブンイレブン' },
+      { id: 5, storeId: 3, productName: '塩', piece: 3, unit: '個', flag: false, storeName: 'セブンイレブン' },
+    ];
+
+    setStoreProductDetails(arr);
   }, []);
+
+  // console.log(storeProductDetails);
+
+  const product = storeProductDetails.map((el, index) => {
+    return (
+      <ul className="details-ul" key={index}>
+        <React.Fragment key={`fragment-${index}`}>
+          <li key={`item-${index}`}>
+            {el.productName}: ({el.piece}
+            {el.unit})
+          </li>
+        </React.Fragment>
+      </ul>
+    );
+  });
 
   return (
     <>
@@ -32,13 +56,7 @@ export default function ResultStore() {
           <h2 className="details-title">{storeName}</h2>
           <div className="food-container">
             <h2 className="details-title">【食材詳細】</h2>
-            <ul className="details-ul">
-              {shopping.map((obj, index) => (
-                <React.Fragment key={index}>
-                  <li>{obj.productName}: 100個</li>
-                </React.Fragment>
-              ))}
-            </ul>
+            {product}
           </div>
           <div className="root-container">
             <h2 className="details-title">【ルート】</h2>

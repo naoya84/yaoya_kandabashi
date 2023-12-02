@@ -34,19 +34,31 @@ a:hover {
 .store-box {
   display: flex;
   flex-direction: column;
-  width: 70%;
+  width: 80%;
   background: rgba(255, 255, 255, 0.92);
   margin-top: 30px;
-  padding: 10%;
+  padding: 7% 7%;
   min-height: 250px;
   border-radius: 10px;
 }
 
-.shopping-box label {
-  margin-bottom: 10px;
-  border-bottom: 1px dashed #696868;
-  padding-bottom: 5px;
+.shopping-label {
+  margin-bottom: 6%;
+  border-bottom: 1px dashed #a5a5a5;
+  padding-bottom: 1%;
+  display: flex;
+  justify-content: space-between;
+  font-size: 0.9em;
+  font-family: sans-serif;
+}
+
+.shopping-label label {
   cursor: pointer;
+}
+
+.shopping-label span {
+  font-size: 0.9em;
+  color: #696868;
 }
 
 .store-list {
@@ -68,4 +80,14 @@ a:hover {
   padding-bottom: 5px;
   cursor: pointer;
   line-height: normal;
+}
+
+.shopping-btn {
+  margin-top: 20px;
+  padding: 10px;
+  background: rgb(33, 45, 156);
+  color: white;
+  border: none;
+  cursor: pointer;
+  border-radius: 3px;
 }
