@@ -34,7 +34,6 @@ exports.seed = function (knex) {
 
   // ダミーデータの生成
   const seedData = storeNames.map((name, i) => ({
-    id: i + 1,
     storeName: name,
     northLatitude: coordinate[i][0],
     eastLongitude: coordinate[i][1],

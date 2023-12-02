@@ -1,155 +1,64 @@
 exports.seed = function (knex) {
-  // ダミーデータの生成
-  // let seedData = [];
-  // let id = 1;
-  // const foodItems = [
-  //   "リンゴ",
-  //   "バナナ",
-  //   "オレンジ",
-  //   "ブドウ",
-  //   "桃",
-  //   "メロン",
-  //   "キウイ",
-  //   "マンゴー",
-  //   "パイナップル",
-  //   "イチゴ",
-  //   "トマト",
-  //   "キャベツ",
-  //   "レタス",
-  //   "ほうれん草",
-  //   "ナス",
-  //   "ピーマン",
-  //   "ジャガイモ",
-  //   "さつまいも",
-  //   "かぼちゃ",
-  //   "アボカド",
-  //   "牛肉",
-  //   "豚肉",
-  //   "鶏肉",
-  //   "ラム肉",
-  //   "ベーコン",
-  //   "ハム",
-  //   "サーモン",
-  //   "マグロ",
-  //   "いわし",
-  //   "えび",
-  //   "卵",
-  //   "牛乳",
-  //   "ヤクルト",
-  //   "チーズ",
-  //   "バター",
-  //   "豆腐",
-  //   "納豆",
-  //   "味噌",
-  //   "しょうゆ",
-  //   "醤油",
-  //   "パスタ",
-  //   "米",
-  //   "パン",
-  //   "うどん",
-  //   "そば",
-  //   "ラーメン",
-  //   "クスクス",
-  //   "キノア",
-  //   "オートミール",
-  //   "コーンフレーク",
-  //   "アーモンド",
-  //   "カシューナッツ",
-  //   "くるみ",
-  //   "ピーナッツ",
-  //   "ひまわりの種",
-  //   "オリーブオイル",
-  //   "ココナッツオイル",
-  //   "ごま油",
-  //   "菜種油",
-  //   "ひまわり油",
-  //   "ニンニク",
-  //   "しょうが",
-  //   "ネギ",
-  //   "玉ねぎ",
-  //   "にんじん",
-  //   "大根",
-  //   "セロリ",
-  //   "きゅうり",
-  //   "茄子",
-  //   "ゴーヤ",
-  //   "チョコレート",
-  //   "クッキー",
-  //   "ケーキ",
-  //   "ドーナツ",
-  //   "パイ",
-  //   "アイスクリーム",
-  //   "プリン",
-  //   "ゼリー",
-  //   "ヨーグルト",
-  //   "キャンディ",
-  //   "コーヒー豆",
-  //   "紅茶葉",
-  //   "緑茶",
-  //   "ウーロン茶",
-  //   "ハーブティー",
-  //   "ココア",
-  //   "砂糖",
-  //   "はちみつ",
-  //   "メープルシロップ",
-  //   "ジャム",
-  //   "しいたけ",
-  //   "まいたけ",
-  //   "エノキ",
-  //   "塩昆布",
-  //   "トリュフ",
-  //   "ポルチーニ",
-  //   "キクラゲ",
-  //   "ひらたけ",
-  //   "エリンギ",
-  //   "なめこ",
-  // ];
-  // const productShapes = ["1本", "1/2本", "1/2玉", "1玉", "1束", "2束"];
   const storageSample = [];
   const foodsTemplate = [
-    { item: 'かぼちゃ', unit: '1/2個', stock: 50, price: 100 },
-    { item: '人参', unit: '本', stock: 200, price: 100 },
-    { item: '玉ねぎ', unit: '個', stock: 500, price: 80 },
-    { item: 'りんご', unit: '個', stock: 100, price: 100 },
-    { item: 'バナナ', unit: '袋', stock: 150, price: 300 },
-    { item: 'ぶどう', unit: '個', stock: 100, price: 1000 },
-    { item: '豚肉', unit: 'パック', stock: 400, price: 300 },
-    { item: '鶏肉', unit: 'パック', stock: 500, price: 200 },
-    { item: '牛肉', unit: 'パック', stock: 300, price: 400 },
-    { item: '鮭', unit: '匹', stock: 200, price: 400 },
-    { item: 'さんま', unit: '匹', stock: 100, price: 200 },
-    { item: 'あじ', unit: '匹', stock: 150, price: 150 },
-    { item: '醤油', unit: '本', stock: 80, price: 350 },
-    { item: 'みりん', unit: '本', stock: 50, price: 300 },
+      'かぼちゃ',
+      '人参',
+      '玉ねぎ',
+      'りんご',
+      'バナナ',
+      'ぶどう',
+      '豚肉',
+      '鶏肉',
+      '牛肉',
+      '鮭',
+      'さんま',
+      'あじ',
+      '塩',
+      '醤油',
+      'みりん',
   ];
-  for (let i = 1; i <= 3; i++) {
-    foodsTemplate.forEach((foodInfo) => {
-      storageSample.push({
-        // id: i,
-        storeId: i,
-        productName: foodInfo.item,
-        unit: foodInfo.unit,
-        stock: foodInfo.stock,
-        price: foodInfo.price,
+
+  for (const unit of ['個', '1/2個', 'パック', '本', '1/2本', '瓶', '匹']) {
+      //店舗１
+      foodsTemplate.forEach((item, i) => {
+          storageSample.push({
+              storeId: 1,
+              productName: item,
+              unit: unit,
+              stock: 100,
+              price: 120,
+          });
       });
-    });
+
+      //店舗2
+      foodsTemplate.forEach((item, i) => {
+          storageSample.push({
+              storeId: 2,
+              productName: item,
+              unit: unit,
+              stock: 100,
+              price: 120,
+          });
+      });
+
+      //店舗3
+      foodsTemplate.forEach((item, i) => {
+          storageSample.push({
+              storeId: 3,
+              productName: item,
+              unit: unit,
+              stock: 100,
+              price: 120,
+          });
+      });
   }
 
-  // const storageSample=[{
-  //   id:1,
-  //   storeId: 3,
-  //   productName: item,
-  //   productShape: shape,
-  //   piece: Math.floor(Math.random() * 100) + 1, // 在庫数は1から100のランダムな数値
-  //   price: ,
-  // }]
 
   // テーブル内の既存データを削除
   return knex('storage')
-    .del()
-    .then(function () {
-      // 新しいシードデータを挿入
-      return knex('storage').insert(storageSample);
-      // return knex('storage').insert(seedData);
-    });
+      .del()
+      .then(function () {
+          // 新しいシードデータを挿入
+          return knex('storage').insert(storageSample);
+      });
 };
