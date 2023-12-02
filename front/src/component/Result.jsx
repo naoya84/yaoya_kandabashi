@@ -30,18 +30,21 @@ export default function Result() {
       { id: 2, storeId: 2, productName: 'かぼちゃ', piece: 1, unit: '個', flag: false, storeName: 'ワークマン' },
       { id: 3, storeId: 3, productName: '豚肉', piece: 10, unit: '個', flag: false, storeName: 'セブンイレブン' },
       { id: 4, storeId: 3, productName: 'あじ', piece: 2, unit: '個', flag: false, storeName: 'セブンイレブン' },
-      { id: 5, storeId: 3, productName: '塩', piece: 3, unit: '個', flag: false, storeName: 'セブンイレブン' },
+      { id: 5, storeId: 3, productName: '塩', piece: 3, unit: '個', flag: true, storeName: 'セブンイレブン' },
     ];
     setStoreProduct(arr);
   }, []);
 
   const product = storeProduct.map((el, index) => {
     return (
-      <label key={index}>
-        <input type="checkbox" />
-        {el.productName} ({el.piece}
-        {el.unit})
-      </label>
+      <div className="shopping-label" key={index}>
+        <label key={`item-${index}`}>
+          {!el.flag && <input type="checkbox" />}
+          {el.productName} ({el.piece}
+          {el.unit})
+        </label>
+        {el.flag && <span>購入済み</span>}
+      </div>
     );
   });
 
@@ -73,7 +76,6 @@ export default function Result() {
     const idArr = [1, 2];
 
     // idをPATCHリクエストのbodyで送信
-
     // バックエンドでidと一致するデータのflagをtrueにする
 
     // バックエンドはshopping_listテーブルのデータ全て返す。
