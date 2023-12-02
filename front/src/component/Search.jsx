@@ -51,58 +51,19 @@ export default function Search() {
 		setFoodsSelected(updatedFoods);
 	};
 
-	const makeCategoryBoxes = () => {
-		const result = foodsTemplate.map((foodObj, idx) => {
-			const category = Object.keys(foodObj)[0];
-			const items = Object.values(foodObj)[0];
-			return (
-				<div className='category_box'>
-					<div className='category_name'>{category}</div>
-
-					{items.map((item) => {
-						return (
-							<div className='item_box'>
-								・{item}
-								<div>
-									<select onChange={(e) => handleQuantityChange(item, e)}>
-										{[...Array(10)]
-											.map((_, i) => i)
-											.map((i) => (
-												<option>{i}</option>
-											))}
-									</select>
-									<select onChange={(e) => handleUnitChange(item, e)}>
-										<option>個</option>
-										<option>1/2個</option>
-										<option>パック</option>
-										<option>本</option>
-										<option>1/２本</option>
-										<option>瓶</option>
-										<option>匹</option>
-									</select>
-								</div>
-							</div>
-						);
-					})}
-				</div>
-			);
-		});
-		return result;
-	};
-
 	const handleSubmit = async (e) => {
 		e.preventDefault();
-		
-    //送信用のデータを作る
+
+		//送信用のデータを作る
 		const foodsForSend = foodsSelected
-    .filter((obj) => obj.quantity > 0)
-    .map((food) => {
-      return {
-        shopping: food.name,
-        quantity: food.quantity,
-        unit: food.unit,
-      };
-    });
+			.filter((obj) => obj.quantity > 0)
+			.map((food) => {
+				return {
+					shopping: food.name,
+					quantity: food.quantity,
+					unit: food.unit,
+				};
+			});
 
 		try {
 			const url = import.meta.env.VITE_DEVELOPMENT_BACKEND_URL || import.meta.env.VITE_PRODUCTION_BACKEND_URL;
@@ -142,6 +103,45 @@ export default function Search() {
 				};
 			});
 		console.log('送信用データ', foodsForSend);
+	};
+
+	const makeCategoryBoxes = () => {
+		const result = foodsTemplate.map((foodObj, idx) => {
+			const category = Object.keys(foodObj)[0];
+			const items = Object.values(foodObj)[0];
+			return (
+				<div className='category_box'>
+					<div className='category_name'>{category}</div>
+
+					{items.map((item) => {
+						return (
+							<div className='item_box'>
+								・{item}
+								<div>
+									<select onChange={(e) => handleQuantityChange(item, e)}>
+										{[...Array(10)]
+											.map((_, i) => i)
+											.map((i) => (
+												<option>{i}</option>
+											))}
+									</select>
+									<select onChange={(e) => handleUnitChange(item, e)}>
+										<option>個</option>
+										<option>1/2個</option>
+										<option>パック</option>
+										<option>本</option>
+										<option>1/２本</option>
+										<option>瓶</option>
+										<option>匹</option>
+									</select>
+								</div>
+							</div>
+						);
+					})}
+				</div>
+			);
+		});
+		return result;
 	};
 
 	return (
