@@ -107,33 +107,32 @@ exports.seed = function (knex) {
   // const productShapes = ["1本", "1/2本", "1/2玉", "1玉", "1束", "2束"];
   const storageSample = [];
   const foodsTemplate = [
-    'かぼちゃ',
-    '人参',
-    '玉ねぎ',
-    'りんご',
-    'バナナ',
-    'ぶどう',
-    '豚肉',
-    '鶏肉',
-    '牛肉',
-    '鮭',
-    'さんま',
-    'あじ',
-    '塩',
-    '醤油',
-    'みりん',
+    { item: 'かぼちゃ', unit: '1/2個', stock: 1, price: 100 },
+    { item: '人参', unit: '本', stock: 1, price: 100 },
+    { item: '玉ねぎ', unit: '個', stock: 1, price: 100 },
+    { item: 'りんご', unit: '個', stock: 1, price: 100 },
+    { item: 'バナナ', unit: '袋', stock: 1, price: 100 },
+    { item: 'ぶどう', unit: '個', stock: 1, price: 100 },
+    { item: '豚肉', unit: '', stock: 1, price: 100 },
+    { item: '鶏肉', unit: '', stock: 1, price: 100 },
+    { item: '牛肉', unit: '', stock: 1, price: 100 },
+    { item: '鮭', unit: '', stock: 1, price: 100 },
+    { item: 'さんま', unit: '', stock: 1, price: 100 },
+    { item: 'あじ', unit: '', stounit: '', stock: 1, price: 100 },
+    { item: '醤油', unit: '', stock: 1, price: 100 },
+    { item: 'みりん', unit: '', stock: 1, price: 100 },
   ];
 
-  foodsTemplate.forEach((item, i) => {
-    storageSample.push({
-      id: i,
-      storeId: 1,
-      productName: item,
-      unit: '本',
-      stock: 100,
-      price: 120,
-    });
-  });
+  // foodsTemplate.forEach((item, i) => {
+  //   storageSample.push({
+  //     id: i,
+  //     storeId: 1,
+  //     productName: item,
+  //     unit: '本',
+  //     stock: 100,
+  //     price: 120,
+  //   });
+  // });
 
   // const storageSample=[{
   //   id:1,
