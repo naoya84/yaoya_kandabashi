@@ -149,7 +149,7 @@ export default function Search() {
 			<div className='page-title'>SEARCH</div>
 			<h1>商品選択</h1>
 			<div className='category_container'>{makeCategoryBoxes()}</div>
-			<button className='search-button' onClick={handleSubmitTest}>
+			<button className='search-button' onClick={handleSubmit}>
 				登録
 			</button>
 		</div>
