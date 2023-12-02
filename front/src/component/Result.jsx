@@ -6,28 +6,23 @@ import storeImg from '../assets/image/store.jpg';
 import shoppingImg from '../assets/image/shopping.jpg';
 
 export default function Result() {
-  // const [store, setStore] = useState([]);
-
-  // useEffect(() => {
-  //   axios
-  //     .get(`/api/customers/1/result/store`) //後でユーザーIDに書き換え
-  //     .then((response) => {
-  //       setStore(response.data);
-  //     })
-  //     .catch((error) => {
-  //       console.log(error);
-  //       alert('取得に失敗しました');
-  //     });
-  // }, []);
-
-  // ------------- new-start --------------------
-
   const [storeProduct, setStoreProduct] = useState([]);
   const [checkBoxes, setCheckBoxes] = useState({});
 
   // 初回レンダリング時に以下を実行
   useEffect(() => {
     // バックエンドにGETリクエストを送り、shopping_listテーブルのデータを全て取得する。
+
+    // axios
+    //   .get(`/api/customers/1/result/store`) //後でユーザーIDに書き換え
+    //   .then((response) => {
+    //     setStore(response.data);
+    //   })
+    //   .catch((error) => {
+    //     console.log(error);
+    //     alert('取得に失敗しました');
+    //   });
+
     const arr = [
       { id: 1, storeId: 1, productName: 'ヨーグルト', piece: 5, unit: '個', flag: false, storeName: 'プライムツリー赤池' },
       { id: 2, storeId: 2, productName: 'かぼちゃ', piece: 1, unit: '個', flag: false, storeName: 'ワークマン' },
@@ -65,14 +60,11 @@ export default function Result() {
   const store = useMemo(() => {
     // console.log('useMemoきてる？？？？？');
     const storeFlagFalseArray = storeProduct.filter((el) => !el.flag); // flagがtrueのオブジェクトは取り除く
-    // console.log(storeFlagFalseArray);
-
     const storeArray = storeFlagFalseArray.map((el) => {
       return JSON.stringify({ storeId: el.storeId, storeName: el.storeName });
     });
     const uniqStoreArray = Array.from(new Set([...storeArray])).map((el) => JSON.parse(el));
-
-    console.log('uniqStoreArray', uniqStoreArray);
+    // console.log('uniqStoreArray', uniqStoreArray);
 
     return uniqStoreArray.map((el, index) => {
       return (
@@ -85,7 +77,7 @@ export default function Result() {
     });
   }, [storeProduct]);
 
-  // チェックボックスの変更が会った時のハンドラー
+  // チェックボックスの変更が有った時のハンドラー
   const handleCheckBoxChange = (checkBoxName) => {
     // console.log(checkBoxName);
     setCheckBoxes((el) => ({
@@ -95,16 +87,22 @@ export default function Result() {
   };
 
   // 選択した商品を購入済みに変更するボタンをクリックした時のハンドラー
-  const handleFlagChangeClick = () => {
+  const handleFlagChangeClick = async () => {
     // console.log('クリックした！');
     // console.log(checkBoxes);
     const checkedCheckboxes = Object.keys(checkBoxes).filter((el) => checkBoxes[el]);
     const idArr = checkedCheckboxes.map((el) => el.split('x')[1]); // PATCHで投げるbody
     // console.log('Checked Checkboxes:', idArr);
 
-    // idArrをPATCHリクエストのbodyで送信
-
-    // バックエンドでidと一致するデータのflagをtrueにする。バックエンドはshopping_listテーブルのデータ全て返す。
+    // try {
+    //   const response = await axios.patch('', {
+    //     data: idArr
+    //   });
+    //   setStoreProduct(response.data);
+    //   console.log('PATCHリクエストが成功しました。');
+    // } catch (error) {
+    //   console.error('PATCHリクエストでエラーが発生しました。', error);
+    // }
 
     // 返ってきた配列をstoreProductに格納する => 再レンダリング
     const arr = [
