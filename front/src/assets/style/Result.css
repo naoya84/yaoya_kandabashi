@@ -69,3 +69,13 @@ a:hover {
   cursor: pointer;
   line-height: normal;
 }
+
+.shopping-btn {
+  margin-top: 20px;
+  padding: 10px;
+  background: rgb(33, 45, 156);
+  color: white;
+  border: none;
+  cursor: pointer;
+  border-radius: 3px;
+}
