@@ -41,7 +41,7 @@ app.post('/api/customers/:id/shopping_list', async (req, res) => {
 			//最適なstoreIdを設定する(minPriceと同じstoreIdを探す)
 			let storeId;
 			await knex('storage')
-				.where({ productName: shopping, price: minPrice })
+				.where({ productName: shopping, price: minPrice, unit: unit })
 				.select('storeId')
 				.then(([result]) => {
 					storeId = result.storeId;
