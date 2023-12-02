@@ -90,40 +90,34 @@ app.get('/api/customers/:id/result/store', async (req, res) => {
 
 //あるユーザーが提案された店の商品を取得する
 app.get('/api/customers/:id/result/shopping', async (req, res) => {
-	//変数を取得
-	const userId = req.params.id;
-	// const storeId = req.query.store_id;
+  const userId = req.params.id;
 
-	await knex('shopping_list')
-		.select(
-			'shopping_list.id',
-			'shopping_list.storeId',
-			'shopping_list.productName',
-			'shopping_list.piece',
-			'shopping_list.unit',
-			'shopping_list.flag',
-			'store_list.storeName'
-		)
-		.join('store_list', 'shopping_list.storeId', '=', 'store_list.id')
-		.where('shopping_list.userId', userId)
-		.then((data) => {
-			console.log('🚀 ~ file: index.js:114 ~ .then ~ data:', data);
-			res.status(200).send(data);
-		})
-		.catch((error) => {
-			console.error(error);
-			res.status(400);
-		});
+  try {
+      const query = knex('shopping_list')
+          .select(
+              'shopping_list.id',
+              'shopping_list.storeId',
+              'shopping_list.productName',
+              'shopping_list.piece',
+              'shopping_list.unit',
+              'shopping_list.flag',
+              'store_list.storeName'
+          )
+          .join('store_list', 'shopping_list.storeId', '=', 'store_list.id')
+          .where('shopping_list.userId', userId);
+      
+      if (req.query.store_id) {
+          query.andWhere('shopping_list.storeId', req.query.store_id);
+      }
 
-	// await knex('shopping_list')
-	//   .where({ userId: customerId, flag: false, storeId: storeId })
-	//   .select('productName')
-	//   // .join("storage", "shopping_list.storeId", "=", "storage.storeId")
-	//   .then((data) => {
-	//     console.log('🚀 ~ file: index.js:114 ~ .then ~ data:', data);
-	//     res.status(200).send(data);
-	//   });
+      const data = await query;
+      res.status(200).send(data);
+  } catch (error) {
+      console.error(error);
+      res.status(400).send(error.message); // エラーメッセージを送信
+  }
 });
+
 
 //全てのお店の情報を取得する
 app.get('/api/store', async (req, res) => {
