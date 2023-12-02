@@ -20,7 +20,7 @@ app.post('/api/customers/:id/shopping_list', async (req, res) => {
 	const customerId = req.params.id;
 
 	try {
-    //アイテムの数だけ、for文でshopping_listに追加していく
+		//アイテムの数だけ、for文でshopping_listに追加していく
 		for (let i = 0; i < bodyArr.length; i++) {
 			//req.bodyから必要情報取り出し
 			const shopping = bodyArr[i].shopping;
@@ -96,6 +96,24 @@ app.get('/api/customers/:id/result/shopping', async (req, res) => {
 	} catch (error) {
 		console.error(error);
 		res.status(400).send(error.message); // エラーメッセージを送信
+	}
+});
+
+//買い物が済んだらflagをtrueにする
+app.patch('/api/udate_shopping_status/:id', (req, res) => {
+	try {
+		const id = req.params.id;
+		knex('shopping_list')
+			.where('id', id)
+			.update({ flag: true })
+			.then(() => {
+				res.status(200).json({ message: `ID ${id} のflagを ${flag} に更新しました` });
+			})
+			.catch((error) => {
+				console.error('更新エラー:', error);
+			});
+	} catch (error) {
+		res.status(500).send(error);
 	}
 });
 
