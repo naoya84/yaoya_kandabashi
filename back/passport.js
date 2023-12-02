@@ -13,11 +13,12 @@ module.exports = function (app) {
       },
       // function (user_name, password, done) {
       function (userName, password, done) {
-        console.log("user", userName); //tatsu
+        console.log("user", userName, password); //tatsu ユーザー入力の値
         console.log("LocalStrategy", LocalStrategy);
         knex("customer")
           .where({
             user_name: userName,
+            password: password,
           })
           .select("*")
           .then(async function (results) {

@@ -33,15 +33,26 @@ const passport = require("passport");
 require("./passport")(app);
 app.use(passport.session());
 
-app.post(
-  "/api/login",
-  // loginFunc,
-  passport.authenticate("local", {
-    successRedirect: "/api/main",
-    failureRedirect: "/api/login",
-    failureFlash: true,
-  })
-);
+// app.post(
+//   "/api/login",
+//   // "/api/login",
+//   // loginFunc,
+//   passport.authenticate("local", {
+//     // successRedirect: "/api/main",
+//     successRedirect: "/search",
+//     // failureRedirect: "/api/login",
+//     failureRedirect: "/api/login",
+//     failureFlash: true,
+//   })
+// );
+app.post("/api/login", passport.authenticate("local"), function (req, res) {
+  // 認証に施工すると、この関数が呼び出される。
+  // 認証されたユーザーは `req.user` に含まれている。
+  // res.redirect('/users/' + req.user.username);
+  console.log("authen", req.user);
+  // res.redirect("/api/search");
+  res.end();
+});
 
 //購入する商品を送信する　-> shipping_list（id:既存＋１,userId:現状持って来れる？今後はどうとる？,storeId:なにを基準？,productName,piece,flag,time）に追加する。
 app.post("/api/customers/:id/shopping_list", async (req, res) => {
