@@ -1,5 +1,5 @@
 import { Link } from 'react-router-dom';
-import React, { useState, useEffect } from 'react';
+import React, { useState, useEffect, useMemo } from 'react';
 import axios from 'axios';
 import '../assets/style/Result.css';
 import storeImg from '../assets/image/store.jpg';
@@ -23,23 +23,36 @@ export default function Result() {
   // ------------- new-start --------------------
 
   const [storeProduct, setStoreProduct] = useState([]);
+  const [checkBoxes, setCheckBoxes] = useState({});
 
+  // 初回レンダリング時に以下を実行
   useEffect(() => {
+    // バックエンドにGETリクエストを送り、shopping_listテーブルのデータを全て取得する。
     const arr = [
       { id: 1, storeId: 1, productName: 'ヨーグルト', piece: 5, unit: '個', flag: false, storeName: 'プライムツリー赤池' },
       { id: 2, storeId: 2, productName: 'かぼちゃ', piece: 1, unit: '個', flag: false, storeName: 'ワークマン' },
       { id: 3, storeId: 3, productName: '豚肉', piece: 10, unit: '個', flag: false, storeName: 'セブンイレブン' },
       { id: 4, storeId: 3, productName: 'あじ', piece: 2, unit: '個', flag: false, storeName: 'セブンイレブン' },
-      { id: 5, storeId: 3, productName: '塩', piece: 3, unit: '個', flag: true, storeName: 'セブンイレブン' },
+      { id: 5, storeId: 3, productName: '塩', piece: 3, unit: '個', flag: false, storeName: 'セブンイレブン' },
     ];
     setStoreProduct(arr);
+
+    // 受け取った配列の数分だけ、checkBoxesにflagを格納する
+    const numCheckboxes = arr.length;
+
+    const initialCheckboxes = Array.from({ length: numCheckboxes }, (_, index) => ({
+      [`checkBox${index + 1}`]: false,
+    })).reduce((acc, checkbox) => ({ ...acc, ...checkbox }), {});
+
+    setCheckBoxes(initialCheckboxes);
   }, []);
 
+  // 買い物リストの商品のレンダリング
   const product = storeProduct.map((el, index) => {
     return (
       <div className="shopping-label" key={index}>
         <label key={`item-${index}`}>
-          {!el.flag && <input type="checkbox" />}
+          {!el.flag && <input type="checkbox" onChange={() => handleCheckBoxChange(`checkBox${index + 1}`)} />}
           {el.productName} ({el.piece}
           {el.unit})
         </label>
@@ -48,13 +61,18 @@ export default function Result() {
     );
   });
 
-  const store = () => {
-    const storeArray = storeProduct.map((el) => {
+  // ショップの提案のストアのレンダリング
+  const store = useMemo(() => {
+    // console.log('useMemoきてる？？？？？');
+    const storeFlagFalseArray = storeProduct.filter((el) => !el.flag); // flagがtrueのオブジェクトは取り除く
+    // console.log(storeFlagFalseArray);
+
+    const storeArray = storeFlagFalseArray.map((el) => {
       return JSON.stringify({ storeId: el.storeId, storeName: el.storeName });
     });
     const uniqStoreArray = Array.from(new Set([...storeArray])).map((el) => JSON.parse(el));
 
-    // console.log(uniqStoreArray);
+    console.log('uniqStoreArray', uniqStoreArray);
 
     return uniqStoreArray.map((el, index) => {
       return (
@@ -65,20 +83,39 @@ export default function Result() {
         </React.Fragment>
       );
     });
+  }, [storeProduct]);
+
+  // チェックボックスの変更が会った時のハンドラー
+  const handleCheckBoxChange = (checkBoxName) => {
+    // console.log(checkBoxName);
+    setCheckBoxes((el) => ({
+      ...el,
+      [checkBoxName]: !el[checkBoxName],
+    }));
   };
 
+  // 選択した商品を購入済みに変更するボタンをクリックした時のハンドラー
   const handleFlagChangeClick = () => {
-    console.log('クリックした！');
-    // チェックボックスにチェック入っているか見にいく
-    // ~~~~~~処理~~~~~
+    // console.log('クリックした！');
+    // console.log(checkBoxes);
+    const checkedCheckboxes = Object.keys(checkBoxes).filter((el) => checkBoxes[el]);
+    const idArr = checkedCheckboxes.map((el) => el.split('x')[1]); // PATCHで投げるbody
+    // console.log('Checked Checkboxes:', idArr);
 
-    // 配列で取得する。
-    const idArr = [1, 2];
+    // idArrをPATCHリクエストのbodyで送信
 
-    // idをPATCHリクエストのbodyで送信
-    // バックエンドでidと一致するデータのflagをtrueにする
+    // バックエンドでidと一致するデータのflagをtrueにする。バックエンドはshopping_listテーブルのデータ全て返す。
 
-    // バックエンドはshopping_listテーブルのデータ全て返す。
+    // 返ってきた配列をstoreProductに格納する => 再レンダリング
+    const arr = [
+      { id: 1, storeId: 1, productName: 'ヨーグルト', piece: 5, unit: '個', flag: false, storeName: 'プライムツリー赤池' },
+      { id: 2, storeId: 2, productName: 'かぼちゃ', piece: 1, unit: '個', flag: true, storeName: 'ワークマン' },
+      { id: 3, storeId: 3, productName: '豚肉', piece: 10, unit: '個', flag: false, storeName: 'セブンイレブン' },
+      { id: 4, storeId: 3, productName: 'あじ', piece: 2, unit: '個', flag: false, storeName: 'セブンイレブン' },
+      { id: 5, storeId: 3, productName: '塩', piece: 3, unit: '個', flag: false, storeName: 'セブンイレブン' },
+    ];
+
+    setStoreProduct(arr);
   };
 
   return (
@@ -94,7 +131,7 @@ export default function Result() {
         </div>
         <div className="store-list" style={{ backgroundImage: `url(${storeImg})` }}>
           <h1>ショップの提案</h1>
-          <div className="store-box">{store()}</div>
+          <div className="store-box">{store}</div>
         </div>
       </div>
     </>
