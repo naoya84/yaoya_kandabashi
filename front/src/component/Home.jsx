@@ -12,7 +12,13 @@ export default function Home() {
 
   const handleSubmit = async () => {
     try {
-      const url = import.meta.env.VITE_DEVELOPMENT_BACKEND_URL || "https://yaoya-lenzzzz.onrender.com";
+      let url;
+      if (process.env.NODE_ENV === "development"){
+        url = import.meta.env.VITE_DEVELOPMENT_BACKEND_URL;  
+      } else {
+        url = "https://yaoya-lenzzzz.onrender.com";  
+      }
+      // url = import.meta.env.VITE_DEVELOPMENT_BACKEND_URL || "https://yaoya-lenzzzz.onrender.com";
       console.log('最終的なURLは?', url);
 
       const response = await fetch(url + '/login', {

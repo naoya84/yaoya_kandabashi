@@ -13,8 +13,14 @@ export default function Result() {
 
 	const fetchData = async () => {
 		try {
-			const url = import.meta.env.VITE_DEVELOPMENT_BACKEND_URL || "https://yaoya-lenzzzz.onrender.com";
-			const response = await fetch(url + `/api/customers/${userId}/result/shopping`, {credentials: 'include'});
+			// const url = import.meta.env.VITE_DEVELOPMENT_BACKEND_URL || "https://yaoya-lenzzzz.onrender.com";
+			let url;
+			if (process.env.NODE_ENV === 'development') {
+				url = import.meta.env.VITE_DEVELOPMENT_BACKEND_URL;
+			} else {
+				url = 'https://yaoya-lenzzzz.onrender.com';
+			}
+			const response = await fetch(url + `/api/customers/${userId}/result/shopping`, { credentials: 'include' });
 			const data = await response.json();
 
 			if (response.ok) {
@@ -98,7 +104,13 @@ export default function Result() {
 		const checkedCheckboxes = Object.keys(checkBoxes).filter((el) => checkBoxes[el]);
 		const idArr = checkedCheckboxes.map((el) => el.split('x')[1]); // PATCHで投げるbody
 
-		const url = import.meta.env.VITE_DEVELOPMENT_BACKEND_URL || "https://yaoya-lenzzzz.onrender.com";
+		// const url = import.meta.env.VITE_DEVELOPMENT_BACKEND_URL || 'https://yaoya-lenzzzz.onrender.com';
+		let url;
+		if (process.env.NODE_ENV === 'development') {
+			url = import.meta.env.VITE_DEVELOPMENT_BACKEND_URL;
+		} else {
+			url = 'https://yaoya-lenzzzz.onrender.com';
+		}
 		const response = await fetch(url + `/api/udate_shopping_status/${userId}`, {
 			method: 'PATCH',
 			credentials: 'include',
