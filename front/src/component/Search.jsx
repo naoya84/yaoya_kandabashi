@@ -7,7 +7,7 @@ import foodsTemplate from '../assets/foodsTemplate';
 export default function Search() {
 	const [foodsSelected, setFoodsSelected] = useState([]);
 	const navigate = useNavigate();
-	const { isAuthenticated, userId, userName } = useAuth();
+	const { isAuthenticated, userId, userName, logout } = useAuth();
 
 	useEffect(() => {
 		console.log('ログイン情報', isAuthenticated, userId, userName);
@@ -89,10 +89,12 @@ export default function Search() {
 			} else {
 				console.log('post_ng', response);
 				alert('登録に失敗しました');
+				logout();
 			}
 		} catch (error) {
 			console.log('error', error);
 			alert('登録に失敗しました');
+			logout();
 		}
 	};
 

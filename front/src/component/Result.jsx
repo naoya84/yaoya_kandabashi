@@ -9,7 +9,7 @@ import shoppingImg from '../assets/image/shopping.jpg';
 export default function Result() {
 	const [storeProduct, setStoreProduct] = useState([]);
 	const [checkBoxes, setCheckBoxes] = useState({});
-	const { isAuthenticated, userId, userName } = useAuth();
+	const { isAuthenticated, userId, userName, logout } = useAuth();
 
 	const fetchData = async () => {
 		try {
@@ -30,7 +30,7 @@ export default function Result() {
 				setStoreProduct(data);
 			} else {
 				console.log('post_ng', response);
-				return [];
+				logout();
 			}
 		} catch (error) {
 			console.log('error', error);
@@ -127,6 +127,7 @@ export default function Result() {
 			fetchData();
 		} else {
 			console.log('patch失敗');
+			logout();
 		}
 
 		// [1,2,3]

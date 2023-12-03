@@ -10,7 +10,7 @@ axios.defaults.baseURL = rootURL;
 export default function Search() {
   const [condition, setCondition] = useState([]);
   const navigate = useNavigate();
-  const { isAuthenticated, userId, userName } = useAuth();
+  const { isAuthenticated, userId, userName, logout } = useAuth();
 
   useEffect(
     ()=>{
@@ -88,6 +88,7 @@ export default function Search() {
       }else{
         console.log('post_ng', response);
         alert('登録に失敗しました');
+        logout();
       }
     }catch (error){
       console.log('error',error);

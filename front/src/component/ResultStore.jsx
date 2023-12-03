@@ -10,7 +10,7 @@ export default function ResultStore() {
 	const [storeProductDetails, setStoreProductDetails] = useState([]);
 	const location = useLocation();
 	const [storeName, setStoreName] = useState();
-	const { isAuthenticated, userId, userName } = useAuth();
+	const { isAuthenticated, userId, userName, logout } = useAuth();
 
 	useEffect(() => {
 		setStoreName(location.state.storeName);
@@ -44,7 +44,7 @@ export default function ResultStore() {
 					setStoreProductDetails(data);
 				} else {
 					console.log('post_ng', response);
-					return [];
+					logout();
 				}
 			} catch (error) {
 				console.log('error', error);
