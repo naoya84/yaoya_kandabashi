@@ -27,7 +27,7 @@ export default function ResultStore() {
 
     const fetchData_param = async (storeId) => {
       try {
-        const url = import.meta.env.VITE_DEVELOPMENT_BACKEND_URL || import.meta.env.VITE_PRODUCTION_BACKEND_URL;
+        const url = import.meta.env.VITE_DEVELOPMENT_BACKEND_URL || "https://yaoya-lenzzzz.onrender.com";
         const response = await fetch(url + `/api/customers/${userId}/result/shopping?store_id=${storeId}`, {credentials: 'include'});
         const data = await response.json();
   

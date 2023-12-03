@@ -17,19 +17,36 @@ app.use(bodyParser.json());
 // app.use(express.json());
 
 // cors設定-------------------
-const corsOptions = {
-	origin: 'http://localhost:5173', // またはReactアプリケーションの実際のオリジン
-	credentials: true, // クロスオリジンリクエストでのクッキー送信を許可
-};
+let corsOptions;
+if(process.env.NODE_ENV === "development"){
+	corsOptions = {
+		origin: 'http://localhost:5173', // またはReactアプリケーションの実際のオリジン
+		credentials: true, // クロスオリジンリクエストでのクッキー送信を許可
+	};
+}else{
+	corsOptions = {
+		origin: 'https://yaoya-lenzzzz.onrender.com', // 
+		credentials: true, // クロスオリジンリクエストでのクッキー送信を許可
+	};
+}
 app.use(cors(corsOptions));
 
 //セッションの保存設定-----------
+let store;
+if(process.env.NODE_ENV === "development"){
+	store = new pgSession({
+		conString: 'postgresql://user:@127.0.0.1/yaoya',
+		tableName: 'session',
+	})
+}else{
+	store = new pgSession({
+		conString: process.env.DATABASE_URL,
+		tableName: 'session',
+	})
+}
 app.use(
 	session({
-		store: new pgSession({
-			conString: 'postgresql://user:@127.0.0.1/yaoya',
-			tableName: 'session',
-		}),
+		store: store,
 		secret: 'himitsudayo',
 		resave: false,
 		saveUninitialized: false,
