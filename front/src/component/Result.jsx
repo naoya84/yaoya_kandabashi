@@ -72,10 +72,9 @@ export default function Result() {
           <div className="shopping-label" key={index}>
             <label key={`item-${index}`}>
               {!el.flag && <input type="checkbox" className="shopping-checkbox" onChange={() => handleCheckBoxChange(`checkBox${el.id}`)} />}
-              {el.productName} ({el.piece}
-              {el.unit})
+              <span className="bold-span">{el.productName}</span> ({el.piece}) [{el.unit}]
             </label>
-            {el.flag && <span>購入済み</span>}
+            {el.flag && <span className="grey-span">購入済み</span>}
           </div>
         );
       });

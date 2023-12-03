@@ -57,9 +57,13 @@ a:hover {
   cursor: pointer;
 }
 
-.shopping-label span {
+.grey-span {
   font-size: 0.9em;
   color: #696868;
+}
+
+.bold-span {
+  font-weight: 800;
 }
 
 .store-list {
