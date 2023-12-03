@@ -17,17 +17,22 @@ export default function Home() {
 
       const response = await fetch(url + '/login', {
         method: 'POST',
+        credentials: 'include',
         headers: {
           'Content-Type': 'application/json',
         },
         body: JSON.stringify({ username: username, password: password }),
       });
-      const data = await response.json();
       if (response.ok) {
-        setUserId(data[0].id);
+        console.log('response',response);
+        const data = await response.json();
+        console.log('data',data);
+        setUserId(data.id);
         setUserName(username);
         login();
         navigate('/search');
+      }else{
+        console.log('login失敗',response);
       }
     } catch (error) {
       console.log(error);
@@ -55,7 +60,7 @@ export default function Home() {
           <input className="login-input" type="text" onChange={(e) => setUsername(e.target.value)}/>
           <p className="login-text">パスワード</p>
           <input className="login-input" type="password" onChange={(e) => setPassword(e.target.value)}/>
-          <button className="login-btn" onClick={handleSubmitTest}>ログイン</button>
+          <button className="login-btn" onClick={handleSubmit}>ログイン</button>
         </div>
         <img src={topImg} alt="マップの画像" />
       </div>

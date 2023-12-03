@@ -3,6 +3,7 @@ const app = express();
 const knex = require('./knex');
 const cors = require('cors');
 const path = require('path');
+const crypto = require('crypto');
 const session = require('express-session');
 const pgSession = require('connect-pg-simple')(session);
 const passport = require('passport');
@@ -16,20 +17,24 @@ app.use(bodyParser.json());
 // app.use(express.json());
 
 // cors設定-------------------
-app.use(cors());
+const corsOptions = {
+	origin: 'http://localhost:5173', // またはReactアプリケーションの実際のオリジン
+	credentials: true, // クロスオリジンリクエストでのクッキー送信を許可
+};
+app.use(cors(corsOptions));
 
 //セッションの保存設定-----------
 app.use(
 	session({
 		store: new pgSession({
-			knex: knex, // 既存のKnexインスタンスを使用
-			tableName: 'session', // セッションデータを保存するテーブル名
+			conString: 'postgresql://user:@127.0.0.1/yaoya',
+			tableName: 'session',
 		}),
 		secret: 'himitsudayo',
 		resave: false,
 		saveUninitialized: false,
 		cookie: {
-			maxAge: 30 * 60 * 1000, // 30分間の有効期限
+			maxAge: 30 * 60 * 1000, // ブラウザ側でのセッション情報の保持期間を30分間に設定
 		},
 	})
 );
@@ -39,53 +44,77 @@ passport.use(
 	new LocalStrategy(async (username, password, done) => {
 		try {
 			const user = await knex('users').where({ username: username }).first();
-			if (!user || user.password !== password) {
-				return done(null, false, { message: 'Invalid username or password' });
+			if (user) {
+				const hash = crypto.createHash('sha256');
+				const hashedInputPass = hash.update(user.salt + password).digest('hex');
+				if (hashedInputPass === user.hashedPass) {
+					return done(null, user);
+				} else {
+					return done(null, false, { message: '認証情報が正しくありません' });
+				}
+			} else {
+				return done(null, false, { message: '認証情報が正しくありません' });
 			}
-			return done(null, user);
 		} catch (error) {
-			return done(error);
+			console.log('error_inLocalStrategy', error);
+			return done(null, false, { message: '認証中にエラーが発生しました。' });
 		}
 	})
 );
 
 passport.serializeUser((user, done) => {
-	done(null, user.id);
+	try {
+		console.log('serializeUser');
+		done(null, user.id);
+	} catch (error) {
+		console.log('error_inSerializeUser', error);
+	}
 });
 
 passport.deserializeUser(async (id, done) => {
+	//このidは、ブラウザからのリクエストに添付されたセッションIDをもとに、
+	//sessionテーブル内に保存されたuseridを探してきたもの。
 	const user = await knex('users').where({ id: id }).first();
 	done(null, user);
+	//この処理はreqオブジェクトにuserを追加する意味。
+	//後のAPIにてreq.userとするとアクセス可能。
+	//ただしログイン認証できないとuserはfalsyになる。
 });
 
 app.use(passport.initialize());
 app.use(passport.session());
 
 function isAuthenticated(req, res, next) {
+	console.log('isAuthentiocated', req.isAuthenticated());
 	if (req.isAuthenticated()) {
 		return next();
 	}
-	res.redirect('/login');
+	res.status(401).json({ message: 'Unauthorized: Access is denied due to invalid credentials.' });
 }
 
 // API =====================================================================
 
 //ログイン認証-------------------
 app.post('/login', (req, res, next) => {
-	passport.authenticate('local', (err, user, info) => {
-		if (err) {
-			return next(err);
-		}
-		if (!user) {
-			return res.status(401).json({ message: info.message });
-		}
-		req.logIn(user, (err) => {
+	try {
+		passport.authenticate('local', (err, user, info) => {
 			if (err) {
 				return next(err);
 			}
-			return res.status(200).json({ message: 'Login successful' });
-		});
-	})(req, res, next);
+			if (!user) {
+				return res.status(401).json({ message: info.message });
+			}
+			console.log('rec_login');
+			req.logIn(user, (err) => {
+				if (err) {
+					return next(err);
+				}
+				return res.status(200).json({ id: user.id });
+			});
+		})(req, res, next);
+	} catch (error) {
+		console.log('catch_Login', error);
+	}
 });
 
 //買い物リストの保存--------------

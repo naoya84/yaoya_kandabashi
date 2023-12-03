@@ -11,23 +11,23 @@ export default function Result() {
 	const [checkBoxes, setCheckBoxes] = useState({});
 	const { isAuthenticated, userId, userName } = useAuth();
 
-  const fetchData = async () => {
-    try {
-      const url = import.meta.env.VITE_DEVELOPMENT_BACKEND_URL || import.meta.env.VITE_PRODUCTION_BACKEND_URL;
-      const response = await fetch(url + `/api/customers/${userId}/result/shopping`);
-      const data = await response.json();
+	const fetchData = async () => {
+		try {
+			const url = import.meta.env.VITE_DEVELOPMENT_BACKEND_URL || import.meta.env.VITE_PRODUCTION_BACKEND_URL;
+			const response = await fetch(url + `/api/customers/${userId}/result/shopping`, {credentials: 'include'});
+			const data = await response.json();
 
-      if (response.ok) {
-        console.log('post_ok', response, data);
-        setStoreProduct(data);
-      } else {
-        console.log('post_ng', response);
-        return [];
-      }
-    } catch (error) {
-      console.log('error', error);
-    }
-  };
+			if (response.ok) {
+				console.log('post_ok', response, data);
+				setStoreProduct(data);
+			} else {
+				console.log('post_ng', response);
+				return [];
+			}
+		} catch (error) {
+			console.log('error', error);
+		}
+	};
 
 	// 初回レンダリング時に以下を実行
 	useEffect(() => {
@@ -101,18 +101,19 @@ export default function Result() {
 		const url = import.meta.env.VITE_DEVELOPMENT_BACKEND_URL || import.meta.env.VITE_PRODUCTION_BACKEND_URL;
 		const response = await fetch(url + `/api/udate_shopping_status/${userId}`, {
 			method: 'PATCH',
+			credentials: 'include',
 			headers: {
 				'Content-Type': 'application/json',
 			},
 			body: JSON.stringify(idArr),
 		});
 
-    if(response.ok){
-      console.log('patch成功');
-      fetchData();
-    }else{
-      console.log('patch失敗');
-    }
+		if (response.ok) {
+			console.log('patch成功');
+			fetchData();
+		} else {
+			console.log('patch失敗');
+		}
 
 		// [1,2,3]
 		// console.log('Checked Checkboxes:', idArr);

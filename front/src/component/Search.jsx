@@ -69,6 +69,7 @@ export default function Search() {
 			const url = import.meta.env.VITE_DEVELOPMENT_BACKEND_URL || import.meta.env.VITE_PRODUCTION_BACKEND_URL;
 			const response = await fetch(url + '/api/customers/1/shopping_list', {
 				method: 'POST',
+				credentials: 'include', // クロスオリジンリクエストでのクッキー送信を許可
 				headers: {
 					'Content-Type': 'application/json',
 				},

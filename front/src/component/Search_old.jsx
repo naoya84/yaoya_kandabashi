@@ -74,6 +74,7 @@ export default function Search() {
     try{
       const response = await fetch('http://localhost:4242/api/customers/1/shopping_list', {
         method: 'POST',
+        credentials: 'include',
         headers: {
           'Content-Type': 'application/json',
         },
