@@ -66,12 +66,12 @@ export default function Search() {
 			});
 
 		try {
-			// const url = import.meta.env.VITE_DEVELOPMENT_BACKEND_URL || "https://yaoya-test2.onrender.com";
+			// const url = import.meta.env.VITE_DEVELOPMENT_BACKEND_URL || "https://yaoya-lenzzzz.onrender.com";
 			let url;
 			if (process.env.NODE_ENV === 'development') {
 				url = import.meta.env.VITE_DEVELOPMENT_BACKEND_URL;
 			} else {
-				url = 'https://yaoya-test2.onrender.com';
+				url = 'https://yaoya-lenzzzz.onrender.com';
 			}
 			const response = await fetch(url + `/api/customers/${userId}/shopping_list`, {
 				method: 'POST',
