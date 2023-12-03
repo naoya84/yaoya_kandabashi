@@ -52,7 +52,8 @@ a:hover {
   font-family: sans-serif;
 }
 
-.shopping-label label {
+.shopping-label label,
+.shopping-checkbox {
   cursor: pointer;
 }
 
