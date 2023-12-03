@@ -15,8 +15,13 @@ export default function Result() {
   const fetchData = async () => {
     try {
       const url = import.meta.env.VITE_DEVELOPMENT_BACKEND_URL || 'https://yaoya-lenzzzz.onrender.com';
+
+      console.log('RESULTのGET URL::', url);
       const response = await fetch(url + `/api/customers/${userId}/result/shopping`);
       const data = await response.json();
+
+      console.log('RESULTのURL::', url);
+      console.log('RESULTのdata', data);
 
       if (response.ok) {
         setStoreProduct(data);

@@ -19,6 +19,8 @@ app.post('/api/customers/:id/shopping_list', async (req, res) => {
   const bodyArr = req.body;
   const customerId = req.params.id;
 
+  console.log('POSTで受け取ったBODY::', bodyArr);
+
   try {
     //アイテムの数だけ、for文でshopping_listに追加していく
     for (let i = 0; i < bodyArr.length; i++) {
@@ -81,6 +83,9 @@ app.get('/api/customers/:id/result/shopping', async (req, res) => {
     }
 
     const data = await query;
+
+    console.log('RESULTのuserID::', userId);
+    console.log('RESULTで送るGET::', data);
     res.status(200).send(data);
   } catch (error) {
     console.error(error);

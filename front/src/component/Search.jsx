@@ -67,6 +67,8 @@ export default function Search() {
 
     try {
       const url = import.meta.env.VITE_DEVELOPMENT_BACKEND_URL || 'https://yaoya-lenzzzz.onrender.com';
+      console.log('SEARCHのPOST URL::', url);
+      console.log('SEARCHのBODY::', foodsForSend);
       const response = await fetch(url + '/api/customers/1/shopping_list', {
         method: 'POST',
         headers: {
