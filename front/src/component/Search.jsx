@@ -116,8 +116,8 @@ export default function Search() {
           {items.map((item) => {
             return (
               <div className="item_box">
-                ・{item}
-                <div>
+                <p className="item_name">{item}</p>
+                <div className="select_box">
                   <select onChange={(e) => handleQuantityChange(item, e)}>
                     {[...Array(10)]
                       .map((_, i) => i)
@@ -147,11 +147,13 @@ export default function Search() {
   return (
     <div className="search-container">
       <div className="page-title">SEARCH</div>
-      <h1>商品選択</h1>
-      <div className="category_container">{makeCategoryBoxes()}</div>
-      <button className="search-button" onClick={handleSubmit}>
-        登録
-      </button>
+      <div className="main-container">
+        <h1 className="main-title">購入したい商品を選んでください</h1>
+        <div className="category_container">{makeCategoryBoxes()}</div>
+        <button className="search-button" onClick={handleSubmit}>
+          買い物リストに登録
+        </button>
+      </div>
     </div>
   );
 }
