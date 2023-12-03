@@ -14,7 +14,7 @@ export default function Result() {
   // バックエンドにGETリクエストを送り、shopping_listテーブルのデータを全て取得する。
   const fetchData = async () => {
     try {
-      const url = import.meta.env.VITE_DEVELOPMENT_BACKEND_URL || import.meta.env.VITE_PRODUCTION_BACKEND_URL;
+      const url = import.meta.env.VITE_DEVELOPMENT_BACKEND_URL || 'https://yaoya-lenzzzz.onrender.com';
       const response = await fetch(url + `/api/customers/${userId}/result/shopping`);
       const data = await response.json();
 
@@ -107,7 +107,7 @@ export default function Result() {
     const idArr = checkedCheckboxes.map((el) => el.split('x')[1]); // PATCHで投げるbody
     // console.log('フロントエンド側', idArr);
 
-    const url = import.meta.env.VITE_DEVELOPMENT_BACKEND_URL || import.meta.env.VITE_PRODUCTION_BACKEND_URL;
+    const url = import.meta.env.VITE_DEVELOPMENT_BACKEND_URL || 'https://yaoya-lenzzzz.onrender.com';
     const response = await fetch(url + `/api/udate_shopping_status/${userId}`, {
       method: 'PATCH',
       headers: {

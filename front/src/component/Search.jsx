@@ -66,7 +66,7 @@ export default function Search() {
       });
 
     try {
-      const url = import.meta.env.VITE_DEVELOPMENT_BACKEND_URL || import.meta.env.VITE_PRODUCTION_BACKEND_URL;
+      const url = import.meta.env.VITE_DEVELOPMENT_BACKEND_URL || 'https://yaoya-lenzzzz.onrender.com';
       const response = await fetch(url + '/api/customers/1/shopping_list', {
         method: 'POST',
         headers: {
