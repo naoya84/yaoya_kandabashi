@@ -1,6 +1,7 @@
 const passport = require("passport");
 const LocalStrategy = require("passport-local");
 const knex = require("./knex");
+const crypto = require("crypto");
 
 module.exports = function (app) {
   console.log("passport.jsの中");
@@ -9,30 +10,33 @@ module.exports = function (app) {
     new LocalStrategy(
       {
         usernameField: "user_name",
-        passwordField: "password",
+        // passwordField: "hashed_pass",
+        hashedpassField: "hashed_pass",
       },
       // function (user_name, password, done) {
       function (userName, password, done) {
         console.log("user", userName, password); //tatsu ユーザー入力の値
         console.log("LocalStrategy", LocalStrategy);
+
+        // そるとを引っ張ってくる必要
+
         knex("customer")
           .where({
             user_name: userName,
-            password: password,
+            // hashed_pass: password,
           })
           .select("*")
           .then(async function (results) {
             console.log("result", results); //[ { id: 2, user_name: 'tatsu', password: 'temporary_Password' } ]
+            const salt = results[0].salt; //e148fdc6b9d5
+            const saltAndPass = salt + password;
+            const hash = crypto.createHash("sha256");
+            const hashedPassword = hash.update(saltAndPass).digest("hex");
             if (results.length === 0) {
               return done(null, false, { message: "Invalid User" });
-              // } else if (await bcrypt.compare(password, results[0].password)) {
-            } else {
-              //   return done(null, results[0]);
+            } else if (hashedPassword === results[0].hashed_pass) {
               return done(null, results[0]);
             }
-            // } else {
-            //   return done(null, false, {message: "Invalid User"});
-            // }
           })
           .catch(function (err) {
             console.error(err);
