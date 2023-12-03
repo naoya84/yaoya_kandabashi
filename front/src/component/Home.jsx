@@ -38,7 +38,7 @@ export default function Home() {
     try {
       setUserId(1);
       setUserName(username);
-      console.log('username',username);
+      console.log('username', username);
       login();
       navigate('/search');
     } catch (error) {
@@ -51,11 +51,13 @@ export default function Home() {
       <div className="home-container">
         <div className="home-login">
           <h1 className="login-title">yaoya へようこそ</h1>
-          <p className="login-text" >ユーザー名</p>
-          <input className="login-input" type="text" onChange={(e) => setUsername(e.target.value)}/>
+          <p className="login-text">ユーザー名</p>
+          <input className="login-input" type="text" onChange={(e) => setUsername(e.target.value)} />
           <p className="login-text">パスワード</p>
-          <input className="login-input" type="password" onChange={(e) => setPassword(e.target.value)}/>
-          <button className="login-btn" onClick={handleSubmitTest}>ログイン</button>
+          <input className="login-input" type="password" onChange={(e) => setPassword(e.target.value)} />
+          <button className="login-btn" onClick={handleSubmitTest}>
+            ログイン
+          </button>
         </div>
         <img src={topImg} alt="マップの画像" />
       </div>
