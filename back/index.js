@@ -3,16 +3,93 @@ const app = express();
 const knex = require('./knex');
 const cors = require('cors');
 const path = require('path');
+const session = require('express-session');
+const pgSession = require('connect-pg-simple')(session);
+const passport = require('passport');
+const LocalStrategy = require('passport-local').Strategy;
 
+//各種設定==================================================================
+//body容量--------------------
 const bodyParser = require('body-parser');
 app.use(bodyParser.urlencoded({ extended: true }));
 app.use(bodyParser.json());
+// app.use(express.json());
 
-app.use(express.json()); //JSON形式のファイルを扱えるようにする
+// cors設定-------------------
 app.use(cors());
 
-//購入する商品を送信する　-> shipping_list（id:既存＋１,userId:現状持って来れる？今後はどうとる？,storeId:なにを基準？,productName,piece,flag,time）に追加する。
-app.post('/api/customers/:id/shopping_list', async (req, res) => {
+//セッションの保存設定-----------
+app.use(
+	session({
+		store: new pgSession({
+			knex: knex, // 既存のKnexインスタンスを使用
+			tableName: 'session', // セッションデータを保存するテーブル名
+		}),
+		secret: 'himitsudayo',
+		resave: false,
+		saveUninitialized: false,
+		cookie: {
+			maxAge: 30 * 60 * 1000, // 30分間の有効期限
+		},
+	})
+);
+
+//ローカル認証-----------------
+passport.use(
+	new LocalStrategy(async (username, password, done) => {
+		try {
+			const user = await knex('users').where({ username: username }).first();
+			if (!user || user.password !== password) {
+				return done(null, false, { message: 'Invalid username or password' });
+			}
+			return done(null, user);
+		} catch (error) {
+			return done(error);
+		}
+	})
+);
+
+passport.serializeUser((user, done) => {
+	done(null, user.id);
+});
+
+passport.deserializeUser(async (id, done) => {
+	const user = await knex('users').where({ id: id }).first();
+	done(null, user);
+});
+
+app.use(passport.initialize());
+app.use(passport.session());
+
+function isAuthenticated(req, res, next) {
+	if (req.isAuthenticated()) {
+		return next();
+	}
+	res.redirect('/login');
+}
+
+// API =====================================================================
+
+//ログイン認証-------------------
+app.post('/login', (req, res, next) => {
+	passport.authenticate('local', (err, user, info) => {
+		if (err) {
+			return next(err);
+		}
+		if (!user) {
+			return res.status(401).json({ message: info.message });
+		}
+		req.logIn(user, (err) => {
+			if (err) {
+				return next(err);
+			}
+			return res.status(200).json({ message: 'Login successful' });
+		});
+	})(req, res, next);
+});
+
+//買い物リストの保存--------------
+app.post('/api/customers/:id/shopping_list', isAuthenticated, async (req, res) => {
 	console.log('postリクエスト受け取り----------');
 
 	//受け取った内容
@@ -69,8 +146,8 @@ app.post('/api/customers/:id/shopping_list', async (req, res) => {
 	}
 });
 
-//あるユーザーが提案された店の商品を取得する
-app.get('/api/customers/:id/result/shopping', async (req, res) => {
+//ユーザー毎の買い物リストを取得----
+app.get('/api/customers/:id/result/shopping', isAuthenticated, async (req, res) => {
 	const userId = req.params.id;
 
 	try {
@@ -99,57 +176,21 @@ app.get('/api/customers/:id/result/shopping', async (req, res) => {
 	}
 });
 
-//買い物が済んだらflagをtrueにする
-app.patch('/api/udate_shopping_status/:id', (req, res) => {
+//買い物済みの登録---------------
+app.patch('/api/udate_shopping_status/:id', isAuthenticated, (req, res) => {
 	try {
 		const id = req.params.id;
 		const idArr = req.body;
 
-		const promiseArr = idArr.map(id=>
-			knex('shopping_list')
-				.where({id: id})
-				.update({ flag: true })
-		)
-		console.log('promiseArr1',promiseArr);
-		Promise.all(promiseArr).then(res => res)
-			
+		const promiseArr = idArr.map((id) => knex('shopping_list').where({ id: id }).update({ flag: true }));
+		console.log('promiseArr1', promiseArr);
+		Promise.all(promiseArr).then((res) => res);
+
 		res.status(200).end();
 	} catch (error) {
-		console.log('promisError',error)
+		console.log('promisError', error);
 		res.status(500).send(error);
 	}
-});
-
-//あるユーザーが送信した商品が購入できる店を取得する
-app.get('/api/customers/:id/result/store', async (req, res) => {
-	//カスタマーidを取得
-	const customerId = req.params.id;
-	//フロントに渡す変数を定義
-	let resultArray;
-	await knex('shopping_list')
-		.where({ userId: customerId, flag: false })
-		.select('store_list.id', 'store_list.storeName')
-		.join('store_list', 'shopping_list.storeId', '=', 'store_list.id')
-		.then((data) => {
-			resultArray = data;
-		})
-		.then(() => {
-			console.log('🚀 ~ file: index.js:87 ~ app.get ~ result:', resultArray);
-			res.status(200).send(resultArray);
-		});
-});
-
-//全てのお店の情報を取得する
-app.get('/api/store', async (req, res) => {
-	await knex
-		.select()
-		.from('store_list')
-		.then((data) => {
-			return data;
-		})
-		.then((data) => {
-			res.status(200).send(data); //dataは配列
-		});
 });
 
 app.use(express.static(path.resolve(__dirname, '../front', 'dist')));
