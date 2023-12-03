@@ -16,9 +16,9 @@ export default function Home() {
       if (process.env.NODE_ENV === "development"){
         url = import.meta.env.VITE_DEVELOPMENT_BACKEND_URL;  
       } else {
-        url = "https://yaoya-lenzzzz.onrender.com";  
+        url = "https://yaoya-test2.onrender.com";  
       }
-      // url = import.meta.env.VITE_DEVELOPMENT_BACKEND_URL || "https://yaoya-lenzzzz.onrender.com";
+      // url = import.meta.env.VITE_DEVELOPMENT_BACKEND_URL || "https://yaoya-test2.onrender.com";
       console.log('最終的なURLは?', url);
 
       const response = await fetch(url + '/login', {
