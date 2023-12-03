@@ -195,6 +195,7 @@ app.post('/api/customers/:id/shopping_list', isAuthenticated, async (req, res) =
 //ユーザー毎の買い物リストを取得----
 app.get('/api/customers/:id/result/shopping', isAuthenticated, async (req, res) => {
 	const userId = req.params.id;
+	console.log('userid_shopping',userId);
 
 	try {
 		const query = knex('shopping_list')
