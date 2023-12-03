@@ -4,7 +4,8 @@
   "description": "買い物先に行ったら、欲しい物が売ってねぇ…。",
   "main": "index.js",
   "scripts": {
-    "setup": "npm install && npm install --prefix front && npm install --prefix back && npm run migrate --prefix back && npm run seed --prefix back",
+    "setup0": "npm install && npm install --prefix front && npm install --prefix back && npm run migrate --prefix back && npm run seed --prefix back",
+    "setup": "npm install && npm install --prefix front && npm install --prefix back && npm run migrate --prefix back",
     "start": "concurrently \"npm run dev --prefix front\" \"npm run startmon --prefix back\""
   },
   "keywords": [],
