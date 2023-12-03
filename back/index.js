@@ -12,6 +12,7 @@ app.use(express.json()); //JSON形式のファイルを扱えるようにする
 app.use(
   cors({
     origin: 'https://yaoya-lenzzzz.onrender.com',
+    credentials: true,
   })
 );
 
