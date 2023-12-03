@@ -9,12 +9,7 @@ app.use(bodyParser.urlencoded({ extended: true }));
 app.use(bodyParser.json());
 
 app.use(express.json()); //JSON形式のファイルを扱えるようにする
-app.use(
-  cors({
-    origin: 'https://yaoya-lenzzzz.onrender.com',
-    credentials: true,
-  })
-);
+app.use(cors());
 
 //購入する商品を送信する　-> shipping_list（id:既存＋１,userId:現状持って来れる？今後はどうとる？,storeId:なにを基準？,productName,piece,flag,time）に追加する。
 app.post('/api/customers/:id/shopping_list', async (req, res) => {
