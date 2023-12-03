@@ -25,7 +25,7 @@ if(process.env.NODE_ENV === "development"){
 	};
 }else{
 	corsOptions = {
-		origin: 'https://yaoya-lenzzzz.onrender.com', // 
+		origin: 'https://yaoya-test2.onrender.com', // 
 		credentials: true, // クロスオリジンリクエストでのクッキー送信を許可
 	};
 }
