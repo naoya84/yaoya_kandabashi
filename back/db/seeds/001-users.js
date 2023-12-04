@@ -7,13 +7,14 @@ const crypto = require('crypto');
 exports.seed = async function (knex) {
 	// Deletes ALL existing entries
 	// await knex('table_name').del()
-	await knex('users').del();
-
 	const users = ['admin', '高橋ジョージ', 'tatsu', 'taro', 'jiro', 'sabro'];
-	for (const name of users) {
-		const salt = crypto.randomBytes(6).toString('hex');
-		const saltAndPass = `${salt}${name}`;
-		const hashedPass = crypto.createHash('sha256').update(saltAndPass).digest('hex');
-		await knex('users').insert({ username: name, salt: salt, hashedPass: hashedPass });
+	for (const username of users) {
+		const exists = await knex('users').where({ username }).first();
+		if (!exists) {
+			const salt = crypto.randomBytes(6).toString('hex');
+			const saltAndPass = `${salt}${username}`;
+			const hashedPass = crypto.createHash('sha256').update(saltAndPass).digest('hex');
+			await knex('users').insert({ username: username, salt: salt, hashedPass: hashedPass });
+		}
 	}
 };
